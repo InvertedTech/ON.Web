@@ -1,7 +1,7 @@
 <template>
   <div class="w-full">
     <label :for="inputId">{{ label }}</label>
-    <ui-text-input v-model="input" :type="type" :id="inputId" />
+    <ui-text-input v-model="input" :type="type" :id="inputId" :readonly="readonly" />
   </div>
 </template>
 
@@ -14,7 +14,8 @@ export default {
       type: String,
       default: 'text'
     },
-    label: String
+    label: String,
+    readonly: Boolean
   },
   data() {
     return {}

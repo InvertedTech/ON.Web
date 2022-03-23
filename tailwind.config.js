@@ -16,6 +16,9 @@ module.exports = {
       cursor: {
         none: 'none'
       },
+      height: {
+        '18': '4.5rem'
+      },
       fontFamily: {
         sans: ['Source Sans Pro', ...defaultTheme.fontFamily.sans]
       }

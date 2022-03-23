@@ -1,5 +1,5 @@
 <template>
-  <input v-model="input" :type="type" :id="id" class="border border-primary focus:outline-none w-full text-lg text-primary px-2 py-0.5 focus:bg-accent" />
+  <input v-model="input" :type="type" :id="id" :readonly="readonly" class="border border-primary focus:outline-none w-full text-lg text-primary px-2 py-0.5 focus:bg-accent" />
 </template>
 
 <script>
@@ -10,7 +10,8 @@ export default {
       type: String,
       default: 'text'
     },
-    id: String
+    id: String,
+    readonly: Boolean
   },
   data() {
     return {}

@@ -9,11 +9,13 @@
 
     <nuxt-link v-if="!isAuthenticated" to="/login" class="font-bold text-lg">Login</nuxt-link>
     <template v-else>
-      <nuxt-link to="/articles" class="font-bold text-lg">Articles</nuxt-link>
+      <nuxt-link to="/content" class="font-bold text-lg">Articles</nuxt-link>
       <span class="px-2">|</span>
       <nuxt-link to="/subscription" class="font-bold text-lg">Subscription</nuxt-link>
       <span class="px-2">|</span>
       <nuxt-link to="/users" class="font-bold text-lg">Manage Users</nuxt-link>
+      <span class="px-2">|</span>
+      <nuxt-link to="/profile" class="font-bold text-lg">My Profile</nuxt-link>
     </template>
   </div>
 </template>

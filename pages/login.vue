@@ -9,7 +9,7 @@
         <div class="flex-grow flex items-center justify-center">
           <form @submit.prevent="submitLogin">
             <div class="bg-white rounded-2xl p-6 shadow-lg">
-              <ui-text-input-with-label v-model="username" label="Username" class="mb-4" />
+              <ui-text-input-with-label v-model="username" label="User Name" class="mb-4" />
               <ui-text-input-with-label v-model="password" label="Password" class="mb-6" />
 
               <ui-btn type="submit">Submit</ui-btn>
