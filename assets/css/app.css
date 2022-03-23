@@ -1,0 +1,5 @@
+@import './fonts.css';
+
+.page-wrapper {
+  min-height: calc(100vh - 72px - 320px);
+}
