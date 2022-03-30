@@ -13,7 +13,8 @@ export default function ({ $axios, store }) {
       config.headers.common['Authorization'] = `Bearer ${bearerToken}`
     }
 
-    if (process.env.NODE_ENV === 'development' && !process.server) {
+    // if ((process.env.NODE_ENV === 'development') && !process.server) {
+    if (!process.server) {
       config.url = `/dev${config.url}`
       console.log('Making request to ' + config.url)
     }

@@ -1,5 +1,5 @@
 <template>
-  <input v-model="input" :type="type" :id="id" :readonly="readonly" class="border border-primary focus:outline-none w-full text-lg text-primary px-2 py-0.5 focus:bg-accent" />
+  <input v-model="input" :type="type" :id="id" :readonly="readonly" class="border border-gray focus:border-primary focus:outline-none w-full text-base text-gray-darkest px-5 focus:bg-white rounded-lg h-14" />
 </template>
 
 <script>

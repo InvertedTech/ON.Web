@@ -3,14 +3,16 @@
     <div class="p-8 md:p-16 max-w-4xl mx-auto">
       <div class="flex items-center mb-6">
         <ui-icon-btn icon="arrow_back" class="-ml-2" to="/content" />
-        <h1 class="text-2xl font-bold pl-2">New Article</h1>
+        <h1 class="text-2xl font-bold pl-2">Edit Article</h1>
+        <span class="flex-grow" />
+        <span class="text-xs font-semibold pl-2">{{ article.ContentID }}</span>
       </div>
       <form @submit.prevent="submit">
-        <ui-text-input-with-label v-model="newArticle.Title" name="title" label="Title" class="mb-4" />
-        <ui-text-input-with-label v-model="newArticle.Subtitle" name="subtitle" label="Subtitle" class="mb-4" />
-        <ui-dropdown v-model="newArticle.SubscriptionLevel" :items="subscriptionLevels" name="level" label="Level" class="mb-4" />
-        <ui-text-input-with-label v-model="newArticle.Author" name="author" label="Author" class="mb-4" />
-        <ui-rich-text-editor v-model="newArticle.Body" name="body" label="Body" class="mb-4" />
+        <ui-text-input-with-label v-model="article.Title" name="title" label="Title" class="mb-4" />
+        <ui-text-input-with-label v-model="article.Subtitle" name="subtitle" label="Subtitle" class="mb-4" />
+        <ui-dropdown v-model="article.SubscriptionLevel" :items="subscriptionLevels" name="level" label="Level" class="mb-4" />
+        <ui-text-input-with-label v-model="article.Author" name="author" label="Author" class="mb-4" />
+        <ui-rich-text-editor v-model="article.Body" name="body" label="Body" class="mb-4" />
         <div class="flex justify-end py-4">
           <ui-btn type="submit">Submit</ui-btn>
         </div>
@@ -21,16 +23,25 @@
 
 <script>
 export default {
+  layout: 'admin',
+  async asyncData({ $axios, params, redirect }) {
+    var record = await $axios
+      .$get(`/api/cms/content/${params.id}`)
+      .then((res) => res.Content.Public)
+      .catch((error) => {
+        console.error('Failed', error)
+        return null
+      })
+    if (!record) return redirect(`/content?error=Article not found`)
+    return {
+      article: {
+        ...record
+      }
+    }
+  },
   data() {
     return {
-      processing: false,
-      newArticle: {
-        Title: '',
-        Subtitle: '',
-        SubscriptionLevel: 0,
-        Author: '',
-        Body: ''
-      }
+      processing: false
     }
   },
   computed: {
@@ -61,7 +72,7 @@ export default {
   },
   methods: {
     validate() {
-      return this.newArticle.Title && this.newArticle.Author
+      return this.article.Title && this.article.Author
     },
     submit() {
       if (!this.validate()) return
@@ -73,7 +84,7 @@ export default {
             CreatedOnUTC: String(Date.now()),
             ModifiedOnUTC: String(Date.now()),
             PublishedOnUTC: String(0),
-            ...this.newArticle
+            ...this.article
           }
         }
       }

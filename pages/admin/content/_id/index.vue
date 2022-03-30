@@ -14,6 +14,7 @@
 
 <script>
 export default {
+  layout: 'admin',
   async asyncData({ $axios, params, redirect }) {
     var record = await $axios
       .$get(`/api/cms/content/${params.id}`)

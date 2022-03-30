@@ -1,10 +1,10 @@
 <template>
-  <div class="w-full page-wrapper">
-    <div class="p-8 md:p-16 max-w-6xl mx-auto">
+  <div class="w-full">
+    <div class="p-4 md:p-6 max-w-6xl mx-auto bg-white rounded-xl shadow-sm">
       <div class="flex items-center mb-6">
-        <h1 class="text-2xl font-bold">Profile</h1>
+        <h1 class="text-xl font-bold">Profile</h1>
         <div class="flex-grow" />
-        <ui-btn @click="logout">Logout</ui-btn>
+        <ui-btn outlined @click="logout">Logout</ui-btn>
       </div>
       <div class="w-full max-w-xl mx-auto">
         <form @submit.prevent="submit">
@@ -22,6 +22,7 @@
 
 <script>
 export default {
+  layout: 'blank',
   middleware: 'authenticated',
   data() {
     return {

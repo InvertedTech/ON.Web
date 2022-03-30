@@ -10,7 +10,7 @@
           <form @submit.prevent="submitLogin">
             <div class="bg-white rounded-2xl p-6 shadow-lg">
               <ui-text-input-with-label v-model="username" label="User Name" class="mb-4" />
-              <ui-text-input-with-label v-model="password" label="Password" class="mb-6" />
+              <ui-text-input-with-label v-model="password" type="password" label="Password" class="mb-6" />
 
               <ui-btn type="submit">Submit</ui-btn>
             </div>

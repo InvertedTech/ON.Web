@@ -1,19 +1,19 @@
 <template>
   <div class="relative w-full" v-click-outside="clickOutsideObj">
     <p :class="disabled ? 'text-gray-300' : ''">{{ label }}</p>
-    <button type="button" :disabled="disabled" class="relative w-full border shadow-sm pl-3 pr-8 py-1.5 text-left focus:outline-none focus:bg-accent" :class="buttonClass" aria-haspopup="listbox" aria-expanded="true" @click.stop.prevent="clickShowMenu">
+    <button type="button" :disabled="disabled" class="relative w-full border focus:border-primary shadow-sm pl-3 pr-8 h-14 rounded-lg text-left focus:outline-none" :class="buttonClass" aria-haspopup="listbox" aria-expanded="true" @click.stop.prevent="clickShowMenu">
       <span class="flex items-center">
         <span class="block truncate" :class="small ? 'text-sm' : ''">{{ selectedText }}</span>
       </span>
-      <span class="ml-3 absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-        <span class="material-icons">expand_more</span>
+      <span class="ml-3 absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+        <span class="material-icons text-2xl">expand_more</span>
       </span>
     </button>
 
     <transition name="menu">
-      <ul v-show="showMenu" class="absolute z-10 -mt-px w-full bg-white border border-primary shadow-lg max-h-56 rounded-b-md py-1 ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none" tabindex="-1" role="listbox">
+      <ul v-show="showMenu" class="absolute z-10 mt-0.5 w-full bg-white max-h-56 rounded-b-md py-1 overflow-auto shadow-lg focus:outline-none" tabindex="-1" role="listbox">
         <template v-for="item in items">
-          <li :key="item.value" class="text-primary hover:bg-accent select-none relative py-2 cursor-pointer hover:bg-black-400" id="listbox-option-0" role="option" @click="clickedOption(item.value)">
+          <li :key="item.value" class="text-text hover:bg-accent select-none relative py-2 cursor-pointer hover:bg-black-400" id="listbox-option-0" role="option" @click="clickedOption(item.value)">
             <div class="flex items-center">
               <span class="font-normal ml-3 block truncate">{{ item.text }}</span>
             </div>
@@ -66,8 +66,8 @@ export default {
     },
     buttonClass() {
       var classes = []
-      if (this.disabled) classes.push('cursor-not-allowed border-primary bg-accent bg-opacity-70 border-opacity-70 text-gray-400')
-      else classes.push('cursor-pointer border-primary bg-white')
+      if (this.disabled) classes.push('cursor-not-allowed border-gray bg-accent bg-opacity-70 border-opacity-70 text-gray-400')
+      else classes.push('cursor-pointer border-gray bg-white')
 
       return classes.join(' ')
     }

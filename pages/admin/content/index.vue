@@ -1,11 +1,11 @@
 <template>
   <div class="w-full page-wrapper">
-    <div class="p-8 md:p-16 max-w-6xl mx-auto">
+    <div class="max-w-6xl mx-auto">
       <div class="flex items-center mb-6">
         <h1 class="text-2xl font-bold">Articles</h1>
 
         <div class="flex-grow" />
-        <ui-btn to="/content/new">New Article</ui-btn>
+        <ui-btn to="/admin/content/new">New Article</ui-btn>
       </div>
       <div class="articles-wrapper -mx-4">
         <div class="flex flex-wrap">
@@ -18,6 +18,7 @@
 
 <script>
 export default {
+  layout: 'admin',
   data() {
     return {
       articles: []

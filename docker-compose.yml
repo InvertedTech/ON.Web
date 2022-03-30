@@ -1,9 +1,11 @@
-version: '3'
+version: '3.7'
 services:
   web:
-    container_name: web
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: advplyr/on-web
     ports:
       - '3000:3000'
+    networks:
+      - nuxt-network
+networks:
+  nuxt-network:
+    driver: bridge

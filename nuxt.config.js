@@ -1,7 +1,9 @@
 export default {
   privateRuntimeConfig: {
     axios: {
-      baseURL: process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8001'
+      baseURL: 'http://localhost:8001'
+      // baseURL: 'http://host.docker.internal:8001'
+      // baseURL: (process.env.NODE_ENV === 'production') ? '/' : 'http://localhost:8001'
     }
   },
   head: {
@@ -35,11 +37,12 @@ export default {
     '@nuxtjs/proxy'
   ],
   proxy: {
+    // '/dev/': { target: 'http://host.docker.internal:8001', pathRewrite: { '^/dev/': '' } }
     '/dev/': { target: 'http://localhost:8001', pathRewrite: { '^/dev/': '' } }
   },
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: '/',
+    baseURL: '/'
   },
   build: {
   }

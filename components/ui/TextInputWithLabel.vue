@@ -1,6 +1,6 @@
 <template>
   <div class="w-full">
-    <label :for="inputId">{{ label }}</label>
+    <label :for="inputId" class="mb-0.5">{{ label }}</label>
     <ui-text-input v-model="input" :type="type" :id="inputId" :readonly="readonly" />
   </div>
 </template>
