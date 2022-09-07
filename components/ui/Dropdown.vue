@@ -1,7 +1,7 @@
 <template>
   <div class="relative w-full" v-click-outside="clickOutsideObj">
     <p :class="disabled ? 'text-gray-300' : ''">{{ label }}</p>
-    <button type="button" :disabled="disabled" class="relative w-full border focus:border-primary shadow-sm pl-3 pr-8 h-14 rounded-lg text-left focus:outline-none" :class="buttonClass" aria-haspopup="listbox" aria-expanded="true" @click.stop.prevent="clickShowMenu">
+    <button type="button" :disabled="disabled" class="relative w-full bg-primary text-text border border-stroke shadow-sm pl-3 pr-8 h-14 rounded-lg text-left focus:outline-none" :class="buttonClass" aria-haspopup="listbox" aria-expanded="true" @click.stop.prevent="clickShowMenu">
       <span class="flex items-center">
         <span class="block truncate" :class="small ? 'text-sm' : ''">{{ selectedText }}</span>
       </span>
@@ -11,9 +11,9 @@
     </button>
 
     <transition name="menu">
-      <ul v-show="showMenu" class="absolute z-10 mt-0.5 w-full bg-white max-h-56 rounded-b-md py-1 overflow-auto shadow-lg focus:outline-none" tabindex="-1" role="listbox">
+      <ul v-show="showMenu" class="absolute z-10 mt-0.5 w-full bg-grayscale-300 max-h-56 rounded-lg py-1 overflow-auto shadow-lg focus:outline-none" tabindex="-1" role="listbox">
         <template v-for="item in items">
-          <li :key="item.value" class="text-text hover:bg-accent select-none relative py-2 cursor-pointer hover:bg-black-400" id="listbox-option-0" role="option" @click="clickedOption(item.value)">
+          <li :key="item.value" class="text-text hover:bg-grayscale-400 select-none relative py-2 cursor-pointer hover:bg-black-400" id="listbox-option-0" role="option" @click="clickedOption(item.value)">
             <div class="flex items-center">
               <span class="font-normal ml-3 block truncate">{{ item.text }}</span>
             </div>

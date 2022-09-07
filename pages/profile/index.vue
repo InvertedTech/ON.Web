@@ -1,18 +1,25 @@
 <template>
-  <div class="w-full">
-    <div class="p-4 md:p-6 max-w-6xl mx-auto bg-white rounded-xl shadow-sm">
-      <div class="flex items-center mb-6">
-        <h1 class="text-xl font-bold">Profile</h1>
+  <div class="w-full h-full bg-primary p-6">
+    <div class="p-4 md:p-6 max-w-3xl mx-auto rounded-4xl shadow-sm bg-bg">
+      <div class="flex items-center mb-6 p-2">
+        <h1 class="text-xl font-bold">My Profile</h1>
         <div class="flex-grow" />
-        <ui-btn outlined @click="logout">Logout</ui-btn>
       </div>
-      <div class="w-full max-w-xl mx-auto">
+      <div class="w-full">
         <form @submit.prevent="submit">
-          <ui-text-input-with-label v-model="userCopy.UserName" label="User Name" readonly class="mb-4" />
-          <ui-text-input-with-label v-model="userCopy.DisplayName" label="Display Name" class="mb-4" />
-          <ui-text-input-with-label v-model="userCopy.Email" label="Email" class="mb-4" />
-          <div class="flex justify-end py-4">
-            <ui-btn type="submit">Submit</ui-btn>
+          <div class="flex flex-wrap">
+            <div class="w-full md:w-1/2 p-2">
+              <ui-text-input-with-label v-model="userCopy.UserName" label="User Name" readonly />
+            </div>
+            <div class="w-full md:w-1/2 p-2">
+              <ui-text-input-with-label v-model="userCopy.DisplayName" label="Display Name" />
+            </div>
+          </div>
+          <div class="w-full p-2">
+            <ui-text-input-with-label v-model="userCopy.Email" label="Email" />
+          </div>
+          <div class="flex justify-end pb-4 pt-6">
+            <ui-btn type="submit">Save</ui-btn>
           </div>
         </form>
       </div>
@@ -22,7 +29,7 @@
 
 <script>
 export default {
-  layout: 'blank',
+  layout: 'default',
   middleware: 'authenticated',
   data() {
     return {
@@ -37,6 +44,18 @@ export default {
   computed: {
     user() {
       return this.$store.state.auth.user
+    },
+    userPublic() {
+      return this.user ? this.user.Public || {} : {}
+    },
+    userPublicData() {
+      return this.userPublic.Data || {}
+    },
+    userPrivate() {
+      return this.user ? this.user.Private || {} : {}
+    },
+    userPrivateData() {
+      return this.userPrivate.Data || {}
     }
   },
   methods: {
@@ -48,6 +67,9 @@ export default {
       this.processing = true
       const updatePayload = {
         DisplayName: this.userCopy.DisplayName
+      }
+      if (this.userCopy.Email) {
+        updatePayload.Emails = [this.userCopy.Email]
       }
       this.$axios
         .$post('/api/auth/user', updatePayload)
@@ -62,17 +84,16 @@ export default {
         })
         .catch((error) => {
           console.error('Failed to update', error)
+          this.$toast.error('Failed to update profile')
           this.processing = false
         })
     },
     init() {
-      this.userCopy.UserName = this.user.UserName
-      this.userCopy.DisplayName = this.user.DisplayName
-      this.userCopy.Email = this.user.Email
-    },
-    logout() {
-      this.$store.commit('auth/reset')
-      location.reload()
+      this.userCopy.UserName = this.userPublicData.UserName
+      this.userCopy.DisplayName = this.userPublicData.DisplayName
+      if (this.userPrivateData.Emails && this.userPrivateData.Emails.length) {
+        this.userCopy.Email = this.userPrivateData.Emails[0]
+      }
     }
   },
   mounted() {

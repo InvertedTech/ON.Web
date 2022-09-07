@@ -7,7 +7,7 @@
       api-key="no-api-key"
       :init="{
         height: 300,
-        skin: 'CUSTOM',
+        skin: 'tinymce-5-dark',
         branding: false,
         menubar: false,
         toolbar: 'undo redo | bold italic backcolor | \

@@ -1,21 +1,22 @@
 <template>
   <div class="w-full h-full">
-    <div class="w-full h-full bg-accent">
-      <div class="w-full h-full max-w-4xl mx-auto flex items-center">
-        <div class="w-full md:w-1/2 p-4 md:p-16">
-          <h1 class="text-6xl font-bold mb-2">Login</h1>
-          <p class="italic font-thin text-2xl">Subheadline lorem ipsum dolor sit amet consecutre</p>
-        </div>
-        <div class="flex-grow flex items-center justify-center">
-          <form @submit.prevent="submitLogin">
-            <div class="bg-white rounded-2xl p-6 shadow-lg">
-              <ui-text-input-with-label v-model="username" label="User Name" class="mb-4" />
-              <ui-text-input-with-label v-model="password" type="password" label="Password" class="mb-6" />
+    <div class="w-full h-full bg-bg">
+      <div class="w-full h-full max-w-md mx-auto flex items-center justify-center">
+        <form @submit.prevent="submitLogin">
+          <h1 class="text-3xl text-center font-bold mb-8">Log In</h1>
+          <ui-text-input-with-label v-model="username" label="User Name" class="mb-4" />
+          <ui-text-input-with-label v-model="password" type="password" label="Password" class="mb-2" />
 
-              <ui-btn type="submit">Submit</ui-btn>
-            </div>
-          </form>
-        </div>
+          <div class="flex justify-end mb-8">
+            <a href="#" class="text-right text-lg text-grayscale-700 hover:text-grayscale-900 hover:underline">Forgot password?</a>
+          </div>
+
+          <ui-btn type="submit" class="w-full text-xl mb-6" height="49px">Log In</ui-btn>
+
+          <div class="flex justify-center">
+            <nuxt-link to="/register" class="text-center text-lg text-grayscale-700 hover:text-grayscale-900 hover:underline">Register</nuxt-link>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -32,11 +33,24 @@ export default {
       processing: false
     }
   },
-  computed: {},
+  computed: {
+    user() {
+      return this.$store.state.auth.user
+    }
+  },
+  watch: {
+    user: {
+      immediate: true,
+      handler(newVal) {
+        if (newVal) this.$router.replace('/')
+      }
+    }
+  },
   methods: {
-    submitLogin() {
+    async submitLogin() {
       if (!this.username || !this.password) {
         console.error('Invalid input')
+        this.$toast.error('Invalid input')
         return
       }
       this.processing = true
@@ -45,23 +59,11 @@ export default {
         UserName: this.username,
         Password: this.password
       }
-      this.$axios
-        .$post('/api/auth/login', payload)
-        .then((res) => {
-          console.log(res)
-          this.$store.commit('auth/setToken', res.BearerToken)
-
-          this.$store.dispatch('auth/fetchUser').then((success) => {
-            if (success) {
-              this.$router.replace('/')
-            }
-            this.processing = false
-          })
-        })
-        .catch((error) => {
-          console.error(error)
-          this.processing = false
-        })
+      const result = await this.$store.dispatch('auth/login', payload)
+      if (!result || result.error) {
+        this.$toast.error(result ? result.error : 'Failed to login')
+      }
+      this.processing = false
     }
   },
   mounted() {}

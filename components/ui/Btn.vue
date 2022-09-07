@@ -1,8 +1,8 @@
 <template>
-  <button v-if="!to" :type="type" :class="className" @click="$emit('click', $event)">
+  <button v-if="!to" :type="type" :class="className" :disabled="disabled" @click="$emit('click', $event)" :style="{ height }">
     <slot />
   </button>
-  <nuxt-link v-else :to="to" :class="className" class="flex items-center">
+  <nuxt-link v-else :to="to" :class="className" :disabled="disabled" class="flex items-center" :style="{ height }">
     <slot />
   </nuxt-link>
 </template>
@@ -15,19 +15,23 @@ export default {
       default: 'button'
     },
     to: String,
-    outlined: Boolean
+    classes: {
+      type: String,
+      default: 'bg-accent-darker hover:bg-accent text-accent hover:text-grayscale-300'
+    },
+    height: {
+      type: String,
+      default: '44px'
+    },
+    disabled: Boolean
   },
   data() {
     return {}
   },
   computed: {
     className() {
-      const classes = ['text-sm px-7 h-12 rounded-lg']
-      if (this.outlined) {
-        classes.push('text-primary hover:bg-primary hover:bg-opacity-5 bg-white border-primary border-2')
-      } else {
-        classes.push('text-white hover:bg-primary hover:bg-opacity-80 bg-primary border-primary hover:border-opacity-20 border-2')
-      }
+      const classes = ['text-sm font-medium px-5 rounded-full min-w-28 text-center']
+      classes.push(this.classes)
       return classes.join(' ')
     }
   },

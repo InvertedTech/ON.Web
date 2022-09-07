@@ -1,11 +1,9 @@
 <template>
-  <div id="app" class="w-full h-screen overflow-hidden text-text bg-bg">
+  <div id="app" class="w-full h-full text-text bg-bg">
     <app-bar />
-    <app-side-nav />
-    <div id="content" class="overflow-y-auto py-6 px-6">
+    <div id="content" class="overflow-y-auto overflow-hidden">
       <Nuxt />
     </div>
-    <app-footer />
   </div>
 </template>
 
@@ -16,22 +14,6 @@ export default {
   },
   computed: {},
   methods: {},
-  mounted() {
-    console.log('Env', process.env.NODE_ENV, process.env.API_URL)
-  }
+  mounted() {}
 }
 </script>
-
-<style>
-#appbar {
-  margin-left: 256px;
-  width: calc(100vw - 256px);
-}
-#app #content {
-  margin-top: 75px;
-  margin-left: 256px;
-  height: calc(100vh - 75px - 56px);
-  min-height: calc(100vh - 75px - 56px);
-  max-height: calc(100vh - 75px - 56px);
-}
-</style>
