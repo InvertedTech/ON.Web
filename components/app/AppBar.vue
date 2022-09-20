@@ -14,6 +14,7 @@
         <nuxt-link to="/login" class="font-bold text-xl text-accent">Login/Register</nuxt-link>
       </div>
       <div v-else class="h-full flex items-center justify-end">
+        <button class="outline-none flex"><span class="material-icons-outlined text-2xl">bookmark_border</span></button>
         <widgets-notification-icon />
         <widgets-account-dropdown-menu />
       </div>

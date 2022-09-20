@@ -8,6 +8,7 @@
       <ui-text-input-with-label v-model="newPost.Title" name="title" label="Title" class="mb-4" />
       <ui-dropdown v-model="newPost.SubscriptionLevel" :items="subscriptionTierItems" name="level" label="Level" class="mb-4" />
       <ui-text-input-with-label v-model="newPost.Author" name="author" label="Author" class="mb-4" />
+      <ui-textarea-with-label v-model="newPost.Description" name="description" label="Description" class="mb-4" />
       <ui-rich-text-editor v-model="newPost.Written.HtmlBody" name="body" label="Body" class="mb-4" />
       <div class="flex justify-end py-4">
         <ui-btn type="submit">Submit</ui-btn>
