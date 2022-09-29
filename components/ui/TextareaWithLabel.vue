@@ -1,6 +1,6 @@
 <template>
   <div class="w-full">
-    <label :for="inputId" class="mb-0.5 text-gray-400">{{ label }}</label>
+    <label :for="inputId" class="mb-0.5 text-gray-300">{{ label }}</label>
     <ui-textarea v-model="input" :type="type" :id="inputId" :cols="cols" :readonly="readonly" />
   </div>
 </template>

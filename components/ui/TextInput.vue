@@ -1,5 +1,5 @@
 <template>
-  <input v-model="input" :type="type" :id="id" :readonly="readonly" class="text-input border border-stroke focus:border-grayscale-600 focus:outline-none w-full text-base text-text bg-primary px-5 focus:bg-grayscale-400 rounded-xl h-12" />
+  <input v-model="input" :type="type" :id="id" :readonly="readonly" class="text-input border border-stroke focus:border-grayscale-600 focus:outline-none w-full text-base text-text bg-primary px-5 focus:bg-grayscale-400 rounded-xl h-12" @blur="blur" />
 </template>
 
 <script>
@@ -26,7 +26,11 @@ export default {
       }
     }
   },
-  methods: {},
+  methods: {
+    blur() {
+      this.$emit('blur')
+    }
+  },
   mounted() {}
 }
 </script>

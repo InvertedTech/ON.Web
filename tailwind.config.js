@@ -40,9 +40,11 @@ module.exports = {
       },
       borderRadius: {
         'base': '0.25rem',
+        '3.75xl': '2rem',
         '4xl': '2.25rem'
       },
       minWidth: {
+        '20': '5rem',
         '28': '7rem',
         '80': '20rem'
       },
@@ -57,8 +59,7 @@ module.exports = {
         '22': '5.5rem'
       },
       fontFamily: {
-        sans: ['Roboto', ...defaultTheme.fontFamily.sans],
-        poppins: ['Poppins', ...defaultTheme.fontFamily.sans]
+        sans: ['Inter', ...defaultTheme.fontFamily.sans]
       }
     }
   },

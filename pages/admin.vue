@@ -2,7 +2,7 @@
   <div class="overflow-y-auto relative bg-primary h-full">
     <app-admin-side-nav :is-open.sync="sideDrawerOpen" />
     <div class="configContent pl-5 pt-5 h-full">
-      <div class="w-full h-full bg-bg rounded-tl-xl">
+      <div class="w-full bg-bg rounded-tl-xl min-h-full">
         <div class="w-full pb-4 px-2 flex items-center lg:hidden border-b border-white border-opacity-10 mb-2">
           <span class="material-icons cursor-pointer" @click.stop.prevent="showMore">more_vert</span>
           <p class="pl-3 capitalize">{{ currentPage }}</p>

@@ -1,6 +1,6 @@
 <template>
   <div v-if="isReady">
-    <label v-if="label" :for="inputId">{{ label }}</label>
+    <label v-if="label" class="text-gray-300" :for="inputId">{{ label }}</label>
     <editor
       v-model="input"
       :id="inputId"
