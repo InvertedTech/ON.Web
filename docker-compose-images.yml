@@ -71,10 +71,7 @@ services:
     volumes:
       - ./tmpdata/settings:/data
   web:
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-    image: opennetwork/onweb
+    image: opennetwork/web:linux-amd64
     expose:
       - "3000"
     environment:

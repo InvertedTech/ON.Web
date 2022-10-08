@@ -90,3 +90,5 @@ sw.*
 *.swp
 
 dev/
+
+tmpdata/
