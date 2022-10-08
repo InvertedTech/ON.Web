@@ -13,10 +13,14 @@ export default function ({ $axios, store }) {
       config.headers.common['Authorization'] = `Bearer ${bearerToken}`
     }
 
-    // if ((process.env.NODE_ENV === 'development') && !process.server) {
-    if (!process.server) {
+    if ((process.env.NODE_ENV === 'development') && !process.server) {
       config.url = `/dev${config.url}`
       console.log('Making request to ' + config.url)
+    }
+
+    if ((process.env.NODE_ENV === 'production') && process.server) {
+        config.url = `http://host.docker.internal${config.url}`
+        console.log('Making request to ' + config.url)
     }
   })
 
