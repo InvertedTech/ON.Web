@@ -3,9 +3,7 @@ name: Web
 on:
   push:
     branches:
-    - main
-    paths:
-    - './**'
+    - master
 
 jobs:
 
