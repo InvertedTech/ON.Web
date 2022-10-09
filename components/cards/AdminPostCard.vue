@@ -1,11 +1,11 @@
 <template>
   <div class="flex rounded-4xl px-6 py-4 bg-primary">
-    <div class="h-32 w-32 rounded-3xl border-4 border-blue-400 overflow-hidden relative">
+    <nuxt-link :to="`/content/${ContentID}`" class="h-32 w-32 rounded-3xl border-4 border-blue-400 overflow-hidden relative">
       <img src="https://picsum.photos/id/1026/300/300" class="w-full h-full" />
       <div class="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-40 hover:bg-opacity-0 text-white text-opacity-50 hover:text-opacity-0">
         <span class="material-icons-outlined text-4xl">{{ contentTypeIcon }}</span>
       </div>
-    </div>
+    </nuxt-link>
     <div class="flex-grow px-4">
       <p class="font-bold mb-1 text-lg">{{ Title }}</p>
       <p class="text-grayscale-700">{{ Description }}</p>

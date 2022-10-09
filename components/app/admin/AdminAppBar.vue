@@ -2,8 +2,8 @@
   <div id="appbar" class="fixed top-0 left-0 w-screen flex items-center h-20 px-2 md:px-10 bg-bg border-b border-grayscale-400 shadow-sm z-10">
     <div class="w-80 min-w-80">
       <nuxt-link to="/" class="flex items-center">
-        <span class="material-icons-outlined text-4xl">desktop_mac</span>
-        <p class="text-3xl font-bold px-3">{{ SiteTitle }}</p>
+        <span class="material-icons-outlined text-3xl text-accent">west</span>
+        <p class="text-xl font-bold px-3">{{ SiteTitle }} Admin</p>
       </nuxt-link>
     </div>
     <div class="flex-grow px-6">

@@ -1,12 +1,12 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
-  purge: {
-    options: {
-      safelist: []
-    }
-  },
-  darkMode: false,
+  mode: 'jit',
+  content: [
+    './pages/**/*.{html,js,vue}',
+    './components/**/*.{html,js,vue}',
+    './layouts/**/*.{html,js,vue}'
+  ],
   theme: {
     extend: {
       colors: {

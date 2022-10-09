@@ -12,8 +12,20 @@
       </div>
       <form @submit.prevent="submit">
         <ui-text-input-with-label v-model="newPost.Title" name="title" label="Title" class="mb-4" />
-        <ui-dropdown v-model="newPost.SubscriptionLevel" :items="subscriptionTierItems" name="level" label="Level" class="mb-4" />
-        <ui-text-input-with-label v-model="newPost.Author" name="author" label="Author" class="mb-4" />
+        <div class="flex items-center -mx-2">
+          <div class="w-full md:w-1/2 px-2">
+            <ui-text-input-with-label v-model="newPost.Author" name="author" label="Author" class="mb-4" />
+          </div>
+          <div class="w-full md:w-1/2 px-2">
+            <ui-dropdown v-model="newPost.SubscriptionLevel" :items="subscriptionTierItems" name="level" label="Level" class="mb-4" />
+          </div>
+        </div>
+        <div class="flex items-center -mx-2">
+          <div class="w-full md:w-1/2 px-2">
+            <ui-multi-select v-model="newPost.Tags" :items="newPost.Tags" label="Tags" class="mb-4" />
+          </div>
+          <div class="w-full md:w-1/2 px-2"></div>
+        </div>
         <ui-textarea-with-label v-model="newPost.Description" name="description" label="Description" class="mb-4" />
 
         <div v-if="postType === 'written'">
@@ -48,7 +60,8 @@ export default {
         Title: '',
         Description: '',
         SubscriptionLevel: 0,
-        Author: ''
+        Author: '',
+        Tags: []
       },
       Written: {
         HtmlBody: ''

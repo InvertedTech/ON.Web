@@ -1,5 +1,5 @@
 <template>
-  <div class="px-8 py-2 w-full absolute top-0 left-0">
+  <div class="px-8 py-2 w-full absolute top-0 left-0 cursor-pointer" @click.stop="clickCard">
     <div class="flex rounded-4xl px-6 py-4 bg-primary relative w-full">
       <div class="h-32 w-32 rounded-3xl border-4 overflow-hidden relative" :class="`border-post-${ContentType.toLowerCase()}`">
         <img src="https://picsum.photos/id/1026/300/300" class="w-full h-full" />
@@ -66,25 +66,9 @@ export default {
     }
   },
   methods: {
-    publishClick() {
-      const endpoint = this.PublishOnUTC ? 'unpublish' : 'publish'
-      const payload = this.PublishOnUTC ? {} : { PublishOnUTC: new Date() }
-      this.$axios
-        .$post(`/api/cms/admin/content/${this.ContentID}/${endpoint}`, payload)
-        .then((data) => {
-          console.log('Published post', data)
-          if (this.PublishOnUTC) {
-            this.$toast.success('Unpublished post')
-            this.post.PublishOnUTC = null
-          } else {
-            this.$toast.success('Published post')
-            this.$set(this.post, 'PublishOnUTC', new Date().toString())
-          }
-        })
-        .catch((error) => {
-          console.error('Failed to publish', error)
-          this.$toast.error('Failed')
-        })
+    clickCard() {
+      const router = this.$router || this.$nuxt.$router
+      router.push(`/content/${this.ContentID}`)
     }
   },
   mounted() {}

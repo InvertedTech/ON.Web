@@ -1,8 +1,6 @@
 export default {
   privateRuntimeConfig: {
     axios: {
-      // baseURL: 'http://localhost:8001'
-      // baseURL: 'http://host.docker.internal:8001'
       baseURL: (process.env.NODE_ENV === 'production') ? '/' : 'http://localhost:8001'
     }
   },
