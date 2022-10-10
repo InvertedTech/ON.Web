@@ -1,7 +1,6 @@
 <template>
   <div class="w-full h-full">
     <component v-if="contentType" :is="componentName" :content="content" />
-    <div style="min-height: 1000px; width: 1px" />
   </div>
 </template>
 
