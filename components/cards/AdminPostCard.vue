@@ -12,7 +12,7 @@
     </div>
     <div class="w-72 h-32">
       <div class="w-full h-full flex items-center">
-        <ui-btn class="mx-2" classes="bg-accent-darker bg-opacity-10 hover:bg-accent-darker text-accent-darker hover:text-accent">Edit</ui-btn>
+        <ui-btn class="mx-2" :to="`/admin/posts/${ContentID}/edit`" classes="bg-accent-darker bg-opacity-10 hover:bg-accent-darker text-accent-darker hover:text-accent">Edit</ui-btn>
         <ui-btn class="mx-2" @click="publishClick">{{ PublishOnUTC ? 'Unpublish' : 'Publish' }}</ui-btn>
         <ui-icon-btn icon="delete" size="32px" icon-size="20px" class="mx-2 text-grayscale-900 hover:text-white" @click="deletePost" />
       </div>

@@ -2,7 +2,7 @@
   <button v-if="!to" :type="type" :class="className" :disabled="disabled" @click="$emit('click', $event)" :style="{ height }">
     <slot />
   </button>
-  <nuxt-link v-else :to="to" :class="className" :disabled="disabled" class="flex items-center" :style="{ height }">
+  <nuxt-link v-else :to="to" :class="className" :disabled="disabled" class="flex items-center justify-center" :style="{ height }">
     <slot />
   </nuxt-link>
 </template>
