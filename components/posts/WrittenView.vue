@@ -25,7 +25,7 @@
         <ui-tag-pill v-for="tag in Tags" :key="tag" :tag="tag" class="mx-1" />
       </div>
       <div class="py-4">
-        <div v-html="HtmlBody" />
+        <div class="rich-text prose prose-invert max-w-3xl mx-auto" v-html="HtmlBody" />
       </div>
     </div>
   </div>

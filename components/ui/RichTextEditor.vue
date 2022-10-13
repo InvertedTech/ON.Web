@@ -2,7 +2,7 @@
   <div>
     <label v-if="label" class="text-gray-300 mb-2" :for="inputId">{{ label }}</label>
     <client-only>
-      <div v-if="editor" class="flex items-center border-t border-b border-grayscale-500 py-1 mb-2">
+      <div v-if="editor" class="flex items-center border-t border-b border-grayscale-500 py-1 mb-4">
         <ui-editor-icon-btn icon="undo" class="mx-1" :disabled="!editor.can().chain().focus().undo().run()" @click="editor.chain().focus().undo().run()" />
         <ui-editor-icon-btn icon="redo" class="mx-1" :disabled="!editor.can().chain().focus().redo().run()" @click="editor.chain().focus().redo().run()" />
 
@@ -13,6 +13,10 @@
         <ui-editor-icon-btn icon="strikethrough_s" class="mx-1" :disabled="!editor.can().chain().focus().toggleStrike().run()" :active="editor.isActive('strike')" @click="editor.chain().focus().toggleStrike().run()" />
         <ui-editor-icon-btn icon="code" class="mx-1" :disabled="!editor.can().chain().focus().toggleCode().run()" :active="editor.isActive('code')" @click="editor.chain().focus().toggleCode().run()" />
 
+        <div class="h-7 w-px bg-grayscale-500 mx-4" />
+
+        <ui-editor-icon-btn icon="format_list_bulleted" class="mx-1" :disabled="!editor.can().chain().focus().toggleBulletList().run()" :active="editor.isActive('bulletList')" @click="editor.chain().focus().toggleBulletList().run()" />
+        <ui-editor-icon-btn icon="format_list_numbered" class="mx-1" :disabled="!editor.can().chain().focus().toggleOrderedList().run()" :active="editor.isActive('orderedList')" @click="editor.chain().focus().toggleOrderedList().run()" />
         <!-- <button @click="editor.chain().focus().unsetAllMarks().run()">clear marks</button>
         <button @click="editor.chain().focus().clearNodes().run()">clear nodes</button>
         <button @click="editor.chain().focus().setParagraph().run()" :class="{ 'is-active': editor.isActive('paragraph') }">paragraph</button>
@@ -29,7 +33,11 @@
         <button @click="editor.chain().focus().setHorizontalRule().run()">horizontal rule</button>
         <button @click="editor.chain().focus().setHardBreak().run()">hard break</button> -->
       </div>
-      <editor-content :editor="editor" />
+      <div class="min-h-[120px] w-full cursor-text" @click="setFocus">
+        <div @click.stop.prevent>
+          <editor-content :editor="editor" />
+        </div>
+      </div>
     </client-only>
   </div>
 </template>
@@ -66,11 +74,22 @@ export default {
       return this.name || String(Math.floor(Math.random() * 100000))
     }
   },
-  methods: {},
+  methods: {
+    setFocus() {
+      if (this.editor) {
+        this.editor.commands.focus('end')
+      }
+    }
+  },
   mounted() {
     this.editor = new Editor({
       content: this.value,
       extensions: [StarterKit],
+      editorProps: {
+        attributes: {
+          class: 'prose prose-invert focus:outline-none max-w-3xl'
+        }
+      },
       onUpdate: () => {
         this.$emit('input', this.editor.getHTML())
       }

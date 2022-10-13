@@ -9,6 +9,30 @@ module.exports = {
   ],
   theme: {
     extend: {
+      typography: {
+        DEFAULT: {
+          css: {
+            p: {
+              marginTop: '0px',
+              marginBottom: '12px'
+            },
+            '> ul > li > *:first-child': {
+              marginTop: '0px',
+            },
+            '> ul > li > *:last-child': {
+              marginBottom: '12px',
+            },
+            '> ol > li > *:first-child': {
+              marginTop: '0px',
+            },
+            '> ol > li > *:last-child': {
+              marginBottom: '12px',
+            },
+            "code::before": { content: '' },
+            "code::after": { content: '' }
+          },
+        },
+      },
       colors: {
         bg: '#2D2D2D',
         text: '#FFFFFF',
@@ -66,5 +90,7 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography')
+  ],
 }
