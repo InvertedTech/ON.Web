@@ -29,6 +29,12 @@
         <ui-textarea-with-label v-model="newPost.Description" name="description" label="Description" class="mb-4" />
 
         <div v-if="postType === 'written'">
+          <div class="w-full mb-4">
+            <p class="mb-1 text-center text-gray-300">Feature Image</p>
+            <div class="w-full aspect-[3.333]">
+              <ui-image-upload-input @asset="featureImageAssetUploaded" />
+            </div>
+          </div>
           <ui-rich-text-editor v-model="Written.HtmlBody" name="body" label="Body" class="mb-4" />
         </div>
         <div v-else-if="postType === 'video'">
@@ -99,6 +105,9 @@ export default {
     }
   },
   methods: {
+    featureImageAssetUploaded(asset) {
+      console.log('Feature Image Asset Uploaded', asset)
+    },
     validateVideoURL() {
       if (!this.newPostVideoURL) {
         this.Video.YoutubeVideoId = ''
