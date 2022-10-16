@@ -12,6 +12,10 @@ export const getters = {
   SubscriptionTiers: (state) => {
     const subscription = state.settings ? state.settings.Subscription : null
     return subscription ? subscription.Tiers || [] : []
+  },
+  CMSMenuNames: (state) => {
+    const CMS = state.settings ? state.settings.CMS : null
+    return CMS ? CMS.Menu : null
   }
 }
 
