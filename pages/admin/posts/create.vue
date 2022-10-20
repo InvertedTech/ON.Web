@@ -169,6 +169,8 @@ export default {
         })
     }
   },
-  mounted() {}
+  mounted() {
+    this.newPost.Author = this.$store.getters['auth/DisplayName']
+  }
 }
 </script>
