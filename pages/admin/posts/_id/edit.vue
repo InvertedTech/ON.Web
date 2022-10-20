@@ -24,6 +24,13 @@
         <ui-textarea-with-label v-model="newPost.Description" name="description" label="Description" class="mb-4" />
 
         <div v-if="postType === 'written'">
+          <div class="w-full mb-4">
+            <p class="mb-1 text-center text-gray-300">Feature Image</p>
+            <div class="w-full aspect-[3.333]">
+              <ui-image-upload-input v-model="newPost.FeaturedImageAssetID" />
+            </div>
+          </div>
+
           <ui-rich-text-editor v-model="Written.HtmlBody" name="body" label="Body" class="mb-4" />
         </div>
         <div v-else-if="postType === 'video'">
@@ -68,7 +75,8 @@ export default {
         Description: '',
         SubscriptionLevel: 0,
         Author: '',
-        Tags: []
+        Tags: [],
+        FeaturedImageAssetID: null
       },
       Written: {
         HtmlBody: ''
@@ -178,7 +186,8 @@ export default {
         Description: this.PublicContentData.Description,
         SubscriptionLevel: this.PublicContentData.SubscriptionLevel,
         Author: this.PublicContentData.Author,
-        Tags: [...this.PublicContentData.Tags]
+        Tags: [...this.PublicContentData.Tags],
+        FeaturedImageAssetID: this.PublicContentData.FeaturedImageAssetID
       }
 
       if (this.PublicContentData.Written) {

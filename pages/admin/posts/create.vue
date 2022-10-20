@@ -32,7 +32,7 @@
           <div class="w-full mb-4">
             <p class="mb-1 text-center text-gray-300">Feature Image</p>
             <div class="w-full aspect-[3.333]">
-              <ui-image-upload-input @asset="featureImageAssetUploaded" />
+              <ui-image-upload-input v-model="newPost.FeaturedImageAssetID" @asset="featureImageAssetUploaded" />
             </div>
           </div>
           <ui-rich-text-editor v-model="Written.HtmlBody" name="body" label="Body" class="mb-4" />
@@ -67,7 +67,8 @@ export default {
         Description: '',
         SubscriptionLevel: 0,
         Author: '',
-        Tags: []
+        Tags: [],
+        FeaturedImageAssetID: null
       },
       Written: {
         HtmlBody: ''

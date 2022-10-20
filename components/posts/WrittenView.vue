@@ -1,7 +1,7 @@
 <template>
   <div class="w-full h-full p-4">
     <div class="w-full aspect-[3.333] rounded-4xl overflow-hidden">
-      <img src="https://picsum.photos/1200/800" class="w-full object-cover" />
+      <img :src="featuredImageSrc" class="w-full object-cover" />
     </div>
     <div class="p-4 w-full">
       <h2 class="text-2xl font-bold mb-1">{{ Title }}</h2>
@@ -64,6 +64,13 @@ export default {
     publishDateDistance() {
       if (!this.$dateDistanceFromNow) return ''
       return this.$dateDistanceFromNow(new Date(this.PublishOnUTC).valueOf())
+    },
+    FeaturedImageAssetID() {
+      return this.ContentData.FeaturedImageAssetID
+    },
+    featuredImageSrc() {
+      if (!this.FeaturedImageAssetID) return 'https://picsum.photos/1200/800'
+      return `${this.$config.baseURL}/api/cms/asset/${this.FeaturedImageAssetID}/data`
     }
   },
   methods: {},

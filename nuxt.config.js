@@ -1,4 +1,7 @@
 export default {
+  publicRuntimeConfig: {
+    baseURL: (process.env.NODE_ENV === 'production') ? '' : 'http://localhost:8001'
+  },
   privateRuntimeConfig: {
     axios: {
       baseURL: (process.env.NODE_ENV === 'production') ? '/' : 'http://localhost:8001'
