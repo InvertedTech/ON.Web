@@ -15,12 +15,24 @@
             <ui-dropdown v-model="newPost.SubscriptionLevel" :items="subscriptionTierItems" name="level" label="Level" class="mb-4" />
           </div>
         </div>
-        <div class="flex items-center -mx-2">
+        <!-- <div class="flex items-center -mx-2">
           <div class="w-full md:w-1/2 px-2">
             <ui-multi-select v-model="newPost.Tags" :items="newPost.Tags" label="Tags" class="mb-4" />
           </div>
           <div class="w-full md:w-1/2 px-2"></div>
+        </div> -->
+        <div class="flex items-center flex-wrap -mx-2">
+          <div class="w-full md:w-1/2 px-2">
+            <ui-dropdown-multi v-model="newPost.ChannelIds" :items="Channels" item-key="ChannelId" item-text="DisplayName" label="Channels" no-items-text="No Channels" class="mb-4" />
+          </div>
+          <div class="w-full md:w-1/2 px-2">
+            <ui-dropdown-multi v-model="newPost.CategoryIds" :items="Categories" item-key="CategoryId" item-text="DisplayName" label="Categories" no-items-text="No Categories" class="mb-4" />
+          </div>
+          <div class="w-full px-2">
+            <ui-multi-select v-model="newPost.Tags" :items="newPost.Tags" label="Tags" class="mb-4" />
+          </div>
         </div>
+
         <ui-textarea-with-label v-model="newPost.Description" name="description" label="Description" class="mb-4" />
 
         <div v-if="postType === 'written'">
@@ -76,6 +88,8 @@ export default {
         SubscriptionLevel: 0,
         Author: '',
         Tags: [],
+        ChannelIds: [],
+        CategoryIds: [],
         FeaturedImageAssetID: null
       },
       Written: {
@@ -105,6 +119,15 @@ export default {
           value: index
         }
       })
+    },
+    CMS() {
+      return this.$store.getters['settings/CMS'] || {}
+    },
+    Channels() {
+      return this.CMS.Channels || []
+    },
+    Categories() {
+      return this.CMS.Categories || []
     },
     isWritten() {
       return this.postType === 'written'
@@ -187,6 +210,8 @@ export default {
         SubscriptionLevel: this.PublicContentData.SubscriptionLevel,
         Author: this.PublicContentData.Author,
         Tags: [...this.PublicContentData.Tags],
+        ChannelIds: [...this.PublicContentData.ChannelIds],
+        CategoryIds: [...this.PublicContentData.CategoryIds],
         FeaturedImageAssetID: this.PublicContentData.FeaturedImageAssetID
       }
 
