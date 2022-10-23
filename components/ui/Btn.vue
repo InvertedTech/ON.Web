@@ -17,7 +17,7 @@ export default {
     to: String,
     classes: {
       type: String,
-      default: 'bg-accent-darker hover:bg-accent text-accent hover:text-grayscale-300'
+      default: 'bg-accent-darker hover:bg-accent text-accent hover:text-grayscale-300 disabled:bg-accent-darker/20 disabled:text-accent/30'
     },
     height: {
       type: String,

@@ -18,3 +18,6 @@ Vue.prototype.$formatDate = (unixms, fnsFormat = 'MM/dd/yyyy HH:mm') => {
   if (!unixms) return ''
   return format(unixms, fnsFormat)
 }
+Vue.prototype.$uniqueId = () => {
+  return Date.now().toString(36) + Math.random().toString(36).substring(2)
+}

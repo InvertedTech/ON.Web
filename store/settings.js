@@ -13,6 +13,9 @@ export const getters = {
     const subscription = state.settings ? state.settings.Subscription : null
     return subscription ? subscription.Tiers || [] : []
   },
+  CMS: (state) => {
+    return state.settings ? state.settings.CMS : null
+  },
   CMSMenuNames: (state) => {
     const CMS = state.settings ? state.settings.CMS : null
     return CMS ? CMS.Menu : null
@@ -36,5 +39,11 @@ export const actions = {
 export const mutations = {
   setSettings(state, val) {
     state.settings = val
+  },
+  updatePersonalization(state, personalization) {
+    state.settings.Personalization = { ...personalization }
+  },
+  updateCMS(state, cms) {
+    state.settings.CMS = { ...cms }
   }
 }
