@@ -39,7 +39,7 @@
           <div class="w-full mb-4">
             <p class="mb-1 text-center text-gray-300">Feature Image</p>
             <div class="w-full aspect-[3.333]">
-              <ui-image-upload-input v-model="newPost.FeaturedImageAssetID" />
+              <ui-asset-upload-input v-model="newPost.FeaturedImageAssetID" />
             </div>
           </div>
 

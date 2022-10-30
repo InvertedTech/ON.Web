@@ -6,7 +6,7 @@
 
     <div class="w-44 h-44 mx-auto">
       <p class="mb-1 text-gray-300">Logo</p>
-      <ui-image-upload-input v-model="NewPersonalization.ProfileImageAssetId" />
+      <ui-asset-upload-input v-model="NewPersonalization.ProfileImageAssetId" />
     </div>
 
     <div class="flex justify-end py-4">

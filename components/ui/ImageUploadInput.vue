@@ -1,9 +1,10 @@
 <template>
   <div class="w-full h-full rounded-3.75xl bg-grayscale-300 text-grayscale-600 hover:text-white cursor-pointer relative overflow-hidden" @click.stop="click">
     <input ref="fileinput" type="file" :accept="accept" class="hidden" @change="inputChanged" />
-    <img v-if="assetImageSrc" :src="assetImageSrc" class="w-full absolute top-0 left-0 object-cover" />
+    <img v-if="sampleDataUri" :src="sampleDataUri" class="w-full absolute top-0 left-0 object-cover" />
+    <img v-else-if="existingImage" :src="existingImage" class="w-full absolute top-0 left-0 object-cover" />
 
-    <div class="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-grayscale-300 hover:bg-white/10 transition-colors" :class="assetImageSrc ? 'opacity-0 hover:opacity-100' : ''">
+    <div class="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-grayscale-300 hover:bg-white/10" :class="sampleDataUri || existingImage ? 'opacity-0 hover:opacity-100' : ''">
       <span class="material-icons-outlined text-4xl">cloud_upload</span>
     </div>
     <!-- TODO: show loading indicator -->
@@ -13,7 +14,10 @@
 <script>
 export default {
   props: {
-    value: String,
+    existingImage: {
+      type: String,
+      default: null
+    },
     accept: {
       type: String,
       default: '.png, .jpg, .jpeg'
@@ -21,23 +25,11 @@ export default {
   },
   data() {
     return {
-      processing: false
+      processing: false,
+      sampleDataUri: null
     }
   },
-  computed: {
-    assetId: {
-      get() {
-        return this.value
-      },
-      set(val) {
-        this.$emit('input', val)
-      }
-    },
-    assetImageSrc() {
-      if (!this.assetId) return null
-      return `${this.$config.baseURL}/api/cms/asset/${this.assetId}/data`
-    }
-  },
+  computed: {},
   methods: {
     click() {
       if (this.processing) return
@@ -48,43 +40,30 @@ export default {
       var _files = Array.from(e.target.files)
       if (_files && _files.length) {
         var file = _files[0]
-        this.uploadAssetFromFile(file)
+        this.sendUpdatedImage(file)
       }
     },
-    convertToBase64(file) {
+    convertToDataUri(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader()
         reader.readAsDataURL(file)
-        reader.onload = () => resolve(reader.result.split(',')[1])
+        reader.onload = () => resolve(reader.result)
         reader.onerror = reject
       })
     },
-    async uploadAssetFromFile(file) {
+    async sendUpdatedImage(file) {
       this.processing = true
-      const base64 = await this.convertToBase64(file)
+      const dataUri = await this.convertToDataUri(file)
+      this.sampleDataUri = dataUri
+
+      const base64 = dataUri.split(',')[1]
+
       const payload = {
-        Image: {
-          Public: {
-            Data: base64,
-            MimeType: file.type
-          }
-        }
+        Data: base64,
+        MimeType: file.type
       }
-      console.log('Uploading asset with payload', payload)
-      this.$axios
-        .$post(`/api/cms/admin/asset`, payload)
-        .then((assetResponse) => {
-          console.log('Asset Response', assetResponse)
-          this.$emit('asset', assetResponse.Record.Image.Public)
-          this.assetId = assetResponse.Record.Image.Public.AssetID
-        })
-        .catch((error) => {
-          console.error('Failed to upload asset', error)
-          this.$toast.error('Failed to upload image')
-        })
-        .finally(() => {
-          this.processing = false
-        })
+      this.processing = false
+      this.$emit('change', payload)
     }
   },
   mounted() {}

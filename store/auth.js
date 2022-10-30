@@ -26,6 +26,9 @@ export const getters = {
   PrivateData: state => {
     return state.user ? state.user.Private : null
   },
+  UserId: (state, getters) => {
+    return getters.PublicData ? getters.PublicData.UserID : null
+  },
   UserData: (state, getters) => {
     return getters.PublicData ? getters.PublicData.Data : null
   },
