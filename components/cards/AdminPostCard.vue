@@ -1,7 +1,7 @@
 <template>
   <div class="flex rounded-4xl px-6 py-4 bg-primary">
-    <nuxt-link :to="`/content/${ContentID}`" class="h-32 w-32 rounded-3xl border-4 border-blue-400 overflow-hidden relative">
-      <img src="https://picsum.photos/id/1026/300/300" class="w-full h-full" />
+    <nuxt-link :to="`/content/${ContentID}`" class="h-24 w-48 rounded-2xl border-4 border-blue-400 overflow-hidden relative">
+      <img :src="featuredImageSrc" class="w-full h-full object-cover" />
       <div class="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-40 hover:bg-opacity-0 text-white text-opacity-50 hover:text-opacity-0">
         <span class="material-icons-outlined text-4xl">{{ contentTypeIcon }}</span>
       </div>
@@ -10,7 +10,7 @@
       <p class="font-bold mb-1 text-lg">{{ Title }}</p>
       <p class="text-grayscale-700">{{ Description }}</p>
     </div>
-    <div class="w-72 h-32">
+    <div class="w-72 h-24">
       <div class="w-full h-full flex items-center">
         <ui-btn class="mx-2" :to="`/admin/posts/${ContentID}/edit`" classes="bg-accent-darker bg-opacity-10 hover:bg-accent-darker text-accent-darker hover:text-accent">Edit</ui-btn>
         <ui-btn class="mx-2" @click="publishClick">{{ PublishOnUTC ? 'Unpublish' : 'Publish' }}</ui-btn>
@@ -50,10 +50,17 @@ export default {
     PublishOnUTC() {
       return this.post ? this.post.PublishOnUTC : null
     },
+    FeaturedImageAssetID() {
+      return this.post ? this.post.FeaturedImageAssetID : null
+    },
     contentTypeIcon() {
       if (this.ContentType === 'Written') return 'article'
       else if (this.ContentType === 'Video') return 'play_circle'
       return 'play'
+    },
+    featuredImageSrc() {
+      if (!this.FeaturedImageAssetID) return 'https://picsum.photos/1200/800'
+      return `${this.$config.baseURL}/api/cms/asset/${this.FeaturedImageAssetID}/data`
     }
   },
   methods: {

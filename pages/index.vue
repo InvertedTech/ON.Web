@@ -5,7 +5,7 @@
       <app-side-nav />
       <!-- Primary content -->
       <div class="flex-grow px-5 py-5 bg-primary">
-        <div class="w-full bg-bg rounded-3xl py-4" style="min-height: 4000px">
+        <div id="content-list-wrapper" class="w-full bg-bg rounded-3xl py-4">
           <app-card-content-list v-if="posts.length" :posts="posts" />
         </div>
       </div>
@@ -59,4 +59,7 @@ export default {
 </script>
 
 <style>
+#content-list-wrapper {
+  min-height: calc(100vh - 40px - 80px);
+}
 </style>

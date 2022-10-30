@@ -1,9 +1,9 @@
 <template>
-  <div class="w-full h-full p-4">
-    <div class="w-full aspect-[3.333] rounded-4xl overflow-hidden">
+  <div class="w-full max-w-3xl mx-auto h-full py-4">
+    <div class="w-full aspect-[2] rounded-3xl overflow-hidden">
       <img :src="featuredImageSrc" class="w-full object-cover" />
     </div>
-    <div class="p-4 w-full">
+    <div class="py-4 w-full">
       <h2 class="text-2xl font-bold mb-1">{{ Title }}</h2>
       <div class="flex items-center py-1">
         <p class="text-gray-300 font-bold text-sm">{{ publishDateDistance }} by {{ Author }}</p>
@@ -25,7 +25,7 @@
         <ui-tag-pill v-for="tag in Tags" :key="tag" :tag="tag" class="mx-1" />
       </div>
       <div class="py-4">
-        <div class="rich-text prose prose-invert max-w-3xl mx-auto" v-html="HtmlBody" />
+        <div class="rich-text prose prose-invert w-full" v-html="HtmlBody" />
       </div>
     </div>
   </div>

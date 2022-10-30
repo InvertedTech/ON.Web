@@ -25,7 +25,7 @@ export default {
   methods: {
     buildCard(post, index) {
       var w = Math.floor(this.contentWidth / this.cardsPerRow)
-      var h = 176 // Temp hardcode
+      var h = 144 // Temp hardcode
 
       var row = Math.floor(index / this.cardsPerRow)
       var col = index % this.cardsPerRow
@@ -72,7 +72,7 @@ export default {
         this.buildCard(this.posts[i], i)
       }
 
-      window.cardcontent.style.height = `${this.posts.length * 300 + 100}px`
+      window.cardcontent.style.height = `${this.posts.length * 144 + 100}px`
     },
     destroyCards() {
       this.cardComponentRefs.forEach((ref) => {

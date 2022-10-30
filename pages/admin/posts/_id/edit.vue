@@ -37,8 +37,11 @@
 
         <div v-if="postType === 'written'">
           <div class="w-full mb-4">
-            <p class="mb-1 text-center text-gray-300">Feature Image</p>
-            <div class="w-full aspect-[3.333]">
+            <div class="mb-1 flex justify-between items-center">
+              <p class="text-gray-300">Feature Image</p>
+              <p class="text-gray-400 text-sm">2:1 aspect ratio</p>
+            </div>
+            <div class="w-full aspect-[2]">
               <ui-asset-upload-input v-model="newPost.FeaturedImageAssetID" />
             </div>
           </div>
