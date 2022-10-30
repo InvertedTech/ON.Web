@@ -1,9 +1,10 @@
 <template>
-  <div id="appbar" class="fixed top-0 left-0 w-screen flex items-center h-20 px-2 md:px-10 bg-bg border-b border-grayscale-400 shadow-sm z-10">
+  <div id="appbar" class="fixed top-0 left-0 w-screen flex items-center h-20 px-2 md:px-8 bg-bg border-b border-grayscale-400 shadow-sm z-10">
     <div class="w-80 min-w-80">
       <nuxt-link to="/" class="flex items-center">
-        <span class="material-icons-outlined text-4xl">desktop_mac</span>
-        <p class="text-3xl font-bold px-3">{{ SiteTitle }}</p>
+        <span v-if="!ProfileImageAssetId" class="material-icons-outlined text-4xl">desktop_mac</span>
+        <img v-else :src="profileImageUrl" class="h-12 w-12 object-cover" />
+        <p class="text-2xl font-medium pl-3">{{ SiteTitle }}</p>
       </nuxt-link>
     </div>
     <div class="flex-grow px-6">
@@ -36,11 +37,17 @@ export default {
     DisplayName() {
       return this.$store.getters['auth/DisplayName']
     },
+    ProfileImageAssetId() {
+      return this.$store.getters['settings/ProfileImageAssetId']
+    },
     UserName() {
       return this.$store.getters['auth/UserName']
     },
     SiteTitle() {
       return this.$store.getters['settings/Title']
+    },
+    profileImageUrl() {
+      return `${this.$config.baseURL}/api/cms/asset/${this.ProfileImageAssetId}/data`
     }
   },
   methods: {},

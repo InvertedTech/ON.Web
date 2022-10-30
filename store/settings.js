@@ -9,6 +9,9 @@ export const getters = {
   Title: (state, getters) => {
     return getters.Personalization ? getters.Personalization.Title : 'Unknown'
   },
+  ProfileImageAssetId: (state, getters) => {
+    return getters.Personalization ? getters.Personalization.ProfileImageAssetId : ''
+  },
   SubscriptionTiers: (state) => {
     const subscription = state.settings ? state.settings.Subscription : null
     return subscription ? subscription.Tiers || [] : []

@@ -2,7 +2,12 @@
   <div class="w-full">
     <ui-text-input-with-label v-model="NewPersonalization.Title" :disabled="processing" label="Site Title" class="mb-4" />
 
-    <ui-textarea-with-label v-model="NewPersonalization.MetaDescription" :disabled="processing" label="Meta Description" />
+    <ui-textarea-with-label v-model="NewPersonalization.MetaDescription" :disabled="processing" label="Meta Description" class="mb-4" />
+
+    <div class="w-44 h-44 mx-auto">
+      <p class="mb-1 text-gray-300">Logo</p>
+      <ui-image-upload-input v-model="NewPersonalization.ProfileImageAssetId" />
+    </div>
 
     <div class="flex justify-end py-4">
       <ui-btn :loading="processing" @click.stop="save">Save</ui-btn>
@@ -18,7 +23,7 @@ export default {
       NewPersonalization: {
         Title: '',
         MetaDescription: '',
-        ProfileImage: null
+        ProfileImageAssetId: null
       }
     }
   },
@@ -53,7 +58,7 @@ export default {
     init() {
       this.NewPersonalization.Title = this.Personalization.Title || ''
       this.NewPersonalization.MetaDescription = this.Personalization.MetaDescription || ''
-      this.NewPersonalization.ProfileImage = this.Personalization.ProfileImage || null
+      this.NewPersonalization.ProfileImageAssetId = this.Personalization.ProfileImageAssetId || null
     }
   },
   mounted() {

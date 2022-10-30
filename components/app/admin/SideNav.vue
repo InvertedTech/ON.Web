@@ -1,7 +1,7 @@
 <template>
   <div class="w-60 fixed left-0 top-20 h-full py-6 px-4 bg-bg transform transition-transform" :class="wrapperClass">
     <template v-for="item in NavItems">
-      <app-bar-side-nav-item :to="item.to" :key="item.name" :text="item.name" :selected="pageRoute === item.to" :icon="item.icon" />
+      <app-bar-side-nav-item :to="item.to" :key="item.name" :text="item.name" :selected="pageRoute.startsWith(item.to)" :icon="item.icon" />
     </template>
   </div>
 </template>
