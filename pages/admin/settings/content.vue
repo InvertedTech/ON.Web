@@ -38,14 +38,12 @@
         </form>
       </div>
     </div>
-
-    <div class="flex justify-end py-4">
-      <ui-btn :loading="processing" @click.stop="save">Save</ui-btn>
-    </div>
   </div>
 </template>
 
 <script>
+import uniqueSlug from 'unique-slug'
+
 export default {
   data() {
     return {
@@ -78,48 +76,82 @@ export default {
   },
   methods: {
     removeCategory(categoryId) {
-      this.NewCategories = this.NewCategories.filter((c) => c.CategoryId !== categoryId)
+      this.processing = true
+      this.$axios
+        .$post(`/api/settings/category/delete/${categoryId}`)
+        .then((data) => {
+          this.NewCategories = this.NewCategories.filter((c) => c.CategoryId !== categoryId)
+        })
+        .catch((error) => {
+          console.error('Failed', error)
+          this.$toast.error('Failed to remove category')
+        })
+        .finally(() => {
+          this.processing = false
+        })
     },
     submitNewCategory() {
       if (!this.NewCategoryName) return
 
-      this.NewCategories.push({
-        CategoryId: this.$uniqueId(),
-        DisplayName: this.NewCategoryName
-      })
-      this.NewCategoryName = ''
+      const payload = {
+        ParentCategoryId: '',
+        DisplayName: this.NewCategoryName,
+        UrlStub: uniqueSlug(this.NewCategoryName)
+      }
+
+      this.processing = true
+      this.$axios
+        .$post(`/api/settings/category/create`, payload)
+        .then((data) => {
+          this.NewCategories.push({
+            ...data
+          })
+          this.NewCategoryName = ''
+        })
+        .catch((error) => {
+          console.error('Failed', error)
+          this.$toast.error('Failed to create category')
+        })
+        .finally(() => {
+          this.processing = false
+        })
     },
     removeChannel(channelId) {
-      this.NewChannels = this.NewChannels.filter((ch) => ch.ChannelId !== channelId)
+      this.processing = true
+      this.$axios
+        .$post(`/api/settings/channel/delete/${channelId}`)
+        .then(() => {
+          this.NewChannels = this.NewChannels.filter((ch) => ch.ChannelId !== channelId)
+        })
+        .catch((error) => {
+          console.error('Failed', error)
+          this.$toast.error('Failed to remove channel')
+        })
+        .finally(() => {
+          this.processing = false
+        })
     },
     submitNewChannel() {
       if (!this.NewChannelName) return
 
-      this.NewChannels.push({
-        ChannelId: this.$uniqueId(),
-        DisplayName: this.NewChannelName
-      })
-      this.NewChannelName = ''
-    },
-    save() {
-      this.processing = true
       const payload = {
-        Data: {
-          Channels: this.NewChannels.map((c) => ({ ...c })),
-          Categories: this.NewCategories.map((c) => ({ ...c })),
-          Menu: { ...this.NewMenu }
-        }
+        ParentChannelId: '',
+        DisplayName: this.NewChannelName,
+        UrlStub: uniqueSlug(this.NewChannelName)
       }
+
+      this.processing = true
       this.$axios
-        .$post('/api/settings/cms/public', payload)
-        .then((res) => {
-          console.log('Response', res)
-          this.$toast.success('Settings saved successfully')
-          this.$store.commit('settings/updateCMS', payload.Data)
+        .$post(`/api/settings/channel/create`, payload)
+        .then((data) => {
+          this.NewChannels.push({
+            ...data
+          })
+          this.NewChannelName = ''
         })
         .catch((error) => {
           console.error('Failed', error)
-          this.$toast.error('Failed to save')
+          this.$toast.error('Failed to create category')
         })
         .finally(() => {
           this.processing = false
