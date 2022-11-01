@@ -104,7 +104,7 @@ export default {
     subscriptionTierItems() {
       return this.SubscriptionTiers.map((sub, index) => {
         return {
-          text: sub.Name,
+          text: '$' + sub.Amount + ' - ' + sub.Name,
           value: index
         }
       })
