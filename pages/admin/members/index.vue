@@ -30,7 +30,7 @@
           </div>
           <div class="w-16 py-2 px-3">
             <div class="w-10 h-10 rounded-full overflow-hidden shadow-lg">
-              <img src="https://picsum.photos/id/1027/300/300" />
+              <img :src="getProfileImageUrl(user.Public.UserID)" class="w-full h-full object-cover" />
             </div>
           </div>
           <div class="flex-grow px-4">
@@ -61,6 +61,9 @@ export default {
   },
   computed: {},
   methods: {
+    getProfileImageUrl(userId) {
+      return `${this.$config.baseURL}/api/auth/user/${userId}/profileimage`
+    },
     toggleSelectAll(v) {
       this.users = this.users.map((u) => {
         u.selected = v
