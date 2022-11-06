@@ -1,6 +1,10 @@
 @import './fonts.css';
 @import './transitions.css';
 
+.prose {
+  --tw-prose-invert-bullets: #fff;
+}
+
 #app #content {
   height: calc(100vh - 80px);
   max-height: calc(100vh - 80px);

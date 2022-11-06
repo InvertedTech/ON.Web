@@ -48,5 +48,8 @@ export const mutations = {
   },
   updateCMS(state, cms) {
     state.settings.CMS = { ...cms }
+  },
+  updateTiers(state, tiers) {
+    state.settings.Subscription.Tiers = tiers
   }
 }
