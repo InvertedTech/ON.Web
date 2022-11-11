@@ -26,7 +26,7 @@ jobs:
     - name: Push amd64
       run: docker push opennetwork/web:linux-amd64
     
-    - name: executing remote ssh commands using ssh key
+    - name: Update demo site
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.DEMO_HOST }}
@@ -34,4 +34,7 @@ jobs:
         key: ${{ secrets.DEMO_KEY }}
         port: ${{ secrets.DEMO_PORT }}
         script: |
-            whoami
+            cd ~/demo
+            docker-compose down
+            docker-compose pull
+            docker-compose up -d
