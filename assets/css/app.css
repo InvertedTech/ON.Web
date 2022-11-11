@@ -3,6 +3,7 @@
 
 .prose {
   --tw-prose-invert-bullets: #fff;
+  --tw-prose-counters: #fff;
 }
 
 #app #content {

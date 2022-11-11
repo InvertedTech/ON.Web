@@ -102,12 +102,16 @@ export default {
       return this.$store.getters['settings/SubscriptionTiers']
     },
     subscriptionTierItems() {
-      return this.SubscriptionTiers.map((sub, index) => {
-        return {
-          text: '$' + sub.Amount + ' - ' + sub.Name,
-          value: index
-        }
-      })
+      return [{ text: 'None', value: 0 }]
+        .concat(
+          this.SubscriptionTiers.map((sub, index) => {
+            return {
+              text: '$' + sub.Amount + ' - ' + sub.Name,
+              value: sub.Amount
+            }
+          })
+        )
+        .sort((a, b) => a.value - b.value)
     },
     CMS() {
       return this.$store.getters['settings/CMS'] || {}

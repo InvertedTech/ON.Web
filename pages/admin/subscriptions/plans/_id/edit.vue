@@ -25,7 +25,8 @@
       </div>
     </div>
 
-    <div class="flex justify-end">
+    <div class="flex justify-between py-4">
+      <ui-btn :disabled="processing" classes="bg-red-500 hover:bg-red-400 text-red-100 hover:text-red-50 disabled:bg-red-300 disabled:text-red-200" @click.stop="deleteSub">Delete</ui-btn>
       <ui-btn :disabled="processing" @click.stop="submit">Save</ui-btn>
     </div>
   </div>
@@ -61,6 +62,32 @@ export default {
     }
   },
   methods: {
+    deleteSub() {
+      if (confirm(`Are you sure you want to delete this subscription plan?`)) {
+        this.processing = true
+        const existingPlans = this.Tiers.filter((t) => t.Amount != this.currentPlan.Amount)
+
+        const payload = {
+          Data: {
+            Tiers: existingPlans
+          }
+        }
+        this.$axios
+          .$post(`/api/settings/subscription/public`, payload)
+          .then(() => {
+            this.$store.commit('settings/updateTiers', existingPlans)
+            this.$toast.success('Subscription plan deleted')
+            this.$router.push('/admin/subscriptions/plans')
+          })
+          .catch((error) => {
+            console.error('Failed', error)
+            this.$toast.error('Failed to remove plan')
+          })
+          .finally(() => {
+            this.processing = false
+          })
+      }
+    },
     selectColor(color) {
       this.newPlan.Color = color
     },
