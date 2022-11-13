@@ -1,19 +1,23 @@
 import cookies from '@/assets/js/js.cookie.min.js'
 
 // Source: https://stackoverflow.com/a/38552302/7431543
-// const parseJwt = (token) => {
-//   var base64Url = token.split('.')[1]
-//   var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
-//   var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
-//     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-//   }).join(''))
+const parseJwt = (token) => {
+  if (process.server) {
+    return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString())
+  }
+  var base64Url = token.split('.')[1]
+  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+  var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
+    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+  }).join(''))
 
-//   return JSON.parse(jsonPayload)
-// }
+  return JSON.parse(jsonPayload)
+}
 
 export const state = () => ({
   token: null,
-  user: null
+  user: null,
+  jwtData: null
 })
 
 export const getters = {
@@ -44,6 +48,10 @@ export const getters = {
   isOwner: (state, getters) => {
     if (!getters.Roles) return false
     return getters.Roles.some(r => r === 'owner')
+  },
+  SubscriptionLevel: (state) => {
+    if (!state.jwtData || !state.jwtData.SubscriptionLevel || isNaN(state.jwtData.SubscriptionLevel)) return 0
+    return Number(state.jwtData.SubscriptionLevel)
   }
 }
 
@@ -99,6 +107,8 @@ export const mutations = {
     state.user = null
     state.token = null
     cookies.remove('ontoken')
+
+    state.jwtData = null
   },
   setUser(state, user) {
     state.user = user
@@ -106,5 +116,7 @@ export const mutations = {
   setToken(state, token) {
     state.token = token
     cookies.set('ontoken', token)
+
+    state.jwtData = parseJwt(token)
   }
 }
