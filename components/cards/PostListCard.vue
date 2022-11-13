@@ -1,11 +1,11 @@
 <template>
   <div class="px-8 py-2 w-full absolute top-0 left-0 cursor-pointer" @click.stop="clickCard">
     <div class="flex rounded-4xl px-6 py-4 bg-primary relative w-full">
-      <div class="h-24 w-48 rounded-2xl border-4 overflow-hidden relative" :class="`border-post-${ContentType.toLowerCase()}`">
+      <div class="h-24 w-48 rounded-2xl border-4 overflow-hidden relative" :class="borderColorClass">
         <img :src="featuredImageSrc" class="w-full h-full object-cover" />
 
         <div v-if="!isAvailableToUser" class="absolute top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center">
-          <span class="material-icons-outlined text-white/80 text-3xl">lock</span>
+          <span class="material-icons-outlined text-white/80 text-3xl text-orange-300">lock</span>
         </div>
       </div>
       <div class="flex-grow px-4 py-1">
@@ -82,7 +82,11 @@ export default {
     UserSubscriptionLevel() {
       return this.store.getters['auth/SubscriptionLevel']
     },
+    userIsOwner() {
+      return this.store.getters['auth/isOwner']
+    },
     isAvailableToUser() {
+      if (this.userIsOwner) return true
       return this.UserSubscriptionLevel >= this.SubscriptionLevel
     },
     contentTypeIcon() {
@@ -93,6 +97,10 @@ export default {
       if (!this.FeaturedImageAssetID) return 'https://picsum.photos/1200/800'
       const config = this.$config || this.$nuxt.$config
       return `${config.baseURL}/api/cms/asset/${this.FeaturedImageAssetID}/data`
+    },
+    borderColorClass() {
+      if (this.isAvailableToUser) return 'border-white'
+      return 'border-orange-500'
     }
   },
   methods: {

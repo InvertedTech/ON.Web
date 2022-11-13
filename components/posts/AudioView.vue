@@ -8,6 +8,10 @@ export default {
     content: {
       type: Object,
       default: () => {}
+    },
+    stats: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {

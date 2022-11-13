@@ -1,6 +1,6 @@
 <template>
   <div class="w-full h-full">
-    <component v-if="contentType" :is="componentName" :content="content" />
+    <component v-if="contentType" :is="componentName" :content="content" :stats="stats" />
   </div>
 </template>
 
@@ -8,6 +8,10 @@
 export default {
   props: {
     content: {
+      type: Object,
+      default: () => {}
+    },
+    stats: {
       type: Object,
       default: () => {}
     }

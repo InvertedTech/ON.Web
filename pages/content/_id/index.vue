@@ -4,7 +4,7 @@
       <!-- Primary content -->
       <div class="flex-grow pr-5 bg-primary">
         <div id="content-container" class="w-full bg-bg">
-          <app-post-view :content="content" />
+          <app-post-view :content="content" :stats="stats" />
         </div>
       </div>
       <!-- Right siderail -->
@@ -25,8 +25,13 @@ export default {
     if (!response || !response.Record) {
       return redirect('/')
     }
+    const stats = await app.$axios.$get(`/api/stats/${params.id}`).catch((error) => {
+      console.error('Failed to get stats', error)
+      return null
+    })
     return {
-      content: response.Record
+      content: response.Record,
+      stats
     }
   },
   data() {
@@ -36,6 +41,7 @@ export default {
   methods: {},
   mounted() {
     console.log('content', this.content)
+    console.log('stats', this.stats)
   }
 }
 </script>

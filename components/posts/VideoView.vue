@@ -11,9 +11,9 @@
         <p class="text-gray-300 font-bold text-sm pr-4">1,337 views</p>
         <p class="text-gray-300 font-bold text-sm">{{ publishDateDistance }} by {{ Author }}</p>
         <div class="flex-grow" />
-        <div class="flex items-center text-grayscale-900 hover:text-white cursor-pointer mx-3">
+        <div class="flex items-center cursor-pointer mx-3" :class="LikedByUser ? 'text-accent-darker hover:text-accent' : 'text-grayscale-900 hover:text-white'" @click.stop="likeClick">
           <span class="material-icons-outlined text-2xl">favorite_border</span>
-          <p class="pl-1.5 text-sm font-bold">1337</p>
+          <p class="pl-1.5 text-sm font-bold">{{ Likes || 'Like' }}</p>
         </div>
         <div class="flex items-center text-grayscale-900 hover:text-white cursor-pointer mx-3">
           <span class="material-icons-outlined text-2xl">share</span>
@@ -40,12 +40,21 @@ export default {
     content: {
       type: Object,
       default: () => {}
+    },
+    stats: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {
-    return {}
+    return {
+      userLikedNow: undefined
+    }
   },
   computed: {
+    ContentID() {
+      return this.content.ContentID
+    },
     ContentData() {
       return this.content.Data || {}
     },
@@ -67,9 +76,37 @@ export default {
     publishDateDistance() {
       if (!this.$dateDistanceFromNow) return ''
       return this.$dateDistanceFromNow(new Date(this.PublishOnUTC).valueOf())
+    },
+    statsData() {
+      return this.stats.Record || {}
+    },
+    LikedByUser() {
+      if (this.userLikedNow !== undefined) return this.userLikedNow
+      return !!this.stats.LikedByUser
+    },
+    Likes() {
+      if (this.LikedByUser) return this.LikesByOtherUsers + 1
+      return this.LikesByOtherUsers
+    },
+    LikesByOtherUsers() {
+      if (this.stats.LikedByUser) return Number(this.statsData.Likes || 0) - 1
+      return Number(this.statsData.Likes || 0)
+    },
+    Views() {
+      return Number(this.statsData.Views || 0)
     }
   },
-  methods: {},
+  methods: {
+    likeClick() {
+      const currentLikeVal = this.LikedByUser
+      this.userLikedNow = !this.LikedByUser
+      const endpoint = this.userLikedNow ? 'like' : 'unlike'
+      this.$axios.$post(`/api/stats/${this.ContentID}/${endpoint}`, { ContentID: this.ContentID }).catch((error) => {
+        console.error('Failed to like post', error)
+        this.userLikedNow = currentLikeVal
+      })
+    }
+  },
   mounted() {}
 }
 </script>
