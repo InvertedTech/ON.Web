@@ -1,5 +1,27 @@
 export const state = () => ({
-  settings: null
+  settings: null,
+  roles: [
+    {
+      text: 'Admin',
+      value: 'admin'
+    },
+    {
+      text: 'Content Publisher',
+      value: 'con_publisher'
+    },
+    {
+      text: 'Content Writer',
+      value: 'con_writer'
+    },
+    {
+      text: 'Comment Moderator',
+      value: 'com_mod'
+    },
+    {
+      text: 'Comment Appellate Judge',
+      value: 'com_appellate'
+    }
+  ]
 })
 
 export const getters = {

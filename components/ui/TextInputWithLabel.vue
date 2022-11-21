@@ -1,7 +1,8 @@
 <template>
   <div class="w-full">
     <label :for="inputId" class="mb-0.5 text-gray-300">{{ label }}</label>
-    <ui-text-input v-model="input" :type="type" :id="inputId" :readonly="readonly" @blur="$emit('blur')" />
+    <ui-text-input ref="textInput" v-model="input" :type="type" :id="inputId" :readonly="readonly" @blur="blur" @keyup="keyup" />
+    <span v-if="errorMessage" class="text-red-600 text-xs pl-1">{{ errorMessage }}</span>
   </div>
 </template>
 
@@ -15,10 +16,16 @@ export default {
       default: 'text'
     },
     label: String,
-    readonly: Boolean
+    readonly: Boolean,
+    validation: {
+      type: Function,
+      default: () => ''
+    }
   },
   data() {
-    return {}
+    return {
+      errorMessage: ''
+    }
   },
   computed: {
     input: {
@@ -33,7 +40,23 @@ export default {
       return this.name || String(Math.floor(Math.random() * 100000))
     }
   },
-  methods: {},
+  methods: {
+    validate() {
+      if (this.validation) {
+        this.errorMessage = this.validation(this.input)
+      }
+    },
+    blur() {
+      this.validate()
+
+      this.$emit('blur')
+    },
+    keyup() {
+      if (this.errorMessage) {
+        this.validate()
+      }
+    }
+  },
   mounted() {}
 }
 </script>

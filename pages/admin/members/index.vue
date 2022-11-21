@@ -5,7 +5,7 @@
     <div class="flex items-center py-6">
       <p class="text-gray-200">All ({{ users.length }})</p>
 
-      <ui-btn height="32px" class="flex items-center mx-6">Add New <span class="material-icons ml-1 text-lg">add</span></ui-btn>
+      <ui-btn height="32px" class="flex items-center mx-6" to="/admin/members/create">Add New <span class="material-icons ml-1 text-lg">add</span></ui-btn>
     </div>
 
     <div class="w-full">

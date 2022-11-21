@@ -1,18 +1,5 @@
 import cookies from '@/assets/js/js.cookie.min.js'
-
-// Source: https://stackoverflow.com/a/38552302/7431543
-const parseJwt = (token) => {
-  if (process.server) {
-    return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString())
-  }
-  var base64Url = token.split('.')[1]
-  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
-  var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
-    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-  }).join(''))
-
-  return JSON.parse(jsonPayload)
-}
+import utils from '@/assets/js/utils'
 
 export const state = () => ({
   token: null,
@@ -117,6 +104,6 @@ export const mutations = {
     state.token = token
     cookies.set('ontoken', token)
 
-    state.jwtData = parseJwt(token)
+    state.jwtData = utils.parseJWT(token)
   }
 }
