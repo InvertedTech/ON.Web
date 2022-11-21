@@ -19,7 +19,7 @@
         <div class="flex-grow px-4">
           <p class="font-semibold text-sm text-gray-300">Name</p>
         </div>
-        <div class="w-20 px-4">
+        <div class="w-64 px-4">
           <p class="font-semibold text-sm text-gray-300">Roles</p>
         </div>
       </div>
@@ -39,9 +39,11 @@
               <p class="text-sm text-gray-400 px-4">@{{ user.Public.Data.UserName }}</p>
             </div>
           </div>
-          <div class="w-20 px-4">
-            <div v-for="role in user.Private.Roles" :key="role" class="py-0.5 px-1 rounded-full bg-blue-500 text-white">
-              <p class="text-xs font-semibold text-center capitalize">{{ role }}</p>
+          <div class="w-64 px-4">
+            <div class="flex flex-wrap">
+              <div v-for="role in user.Private.Roles" :key="role" class="py-0.5 px-1 mx-0.5 rounded-full bg-blue-500 text-white">
+                <p class="text-xs font-semibold text-center">{{ getRoleText(role) }}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -59,8 +61,17 @@ export default {
       isSelectedAll: false
     }
   },
-  computed: {},
+  computed: {
+    roles() {
+      return this.$store.state.settings.roles
+    }
+  },
   methods: {
+    getRoleText(role) {
+      if (role === 'owner') return 'Owner'
+      const roleObj = this.roles.find((r) => r.value === role)
+      return roleObj ? roleObj.text : 'Unknown'
+    },
     getProfileImageUrl(userId) {
       return `${this.$config.baseURL}/api/auth/user/${userId}/profileimage`
     },
