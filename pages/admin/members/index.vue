@@ -6,6 +6,16 @@
       <p class="text-gray-200">All ({{ users.length }})</p>
 
       <ui-btn height="32px" class="flex items-center mx-6" to="/admin/members/create">Add New <span class="material-icons ml-1 text-lg">add</span></ui-btn>
+
+      <div class="flex-grow" />
+
+      <ui-btn v-if="numDisabledUsersSelected" :disabled="processing" height="32px" class="mx-6" classes="bg-green-500 hover:bg-green-400 text-green-100 hover:text-green-50 disabled:bg-green-600/20 disabled:text-green-400/30" @click.stop="activateUsers"> Activate </ui-btn>
+      <ui-btn v-if="usersSelected.length && !numDisabledUsersSelected" :disabled="processing" height="32px" class="mx-6" classes="bg-yellow-500 hover:bg-yellow-400 text-yellow-100 hover:text-yellow-50 disabled:bg-yellow-600/20 disabled:text-yellow-400/30" @click.stop="deactivateUsers"> Deactivate </ui-btn>
+
+      <div class="flex items-center">
+        <ui-checkbox v-model="showAll" />
+        <p class="pl-1 text-sm text-gray-200 cursor-pointer select-none" @click="showAll = !showAll">Show All</p>
+      </div>
     </div>
 
     <div class="w-full">
@@ -23,8 +33,8 @@
           <p class="font-semibold text-sm text-gray-300">Roles</p>
         </div>
       </div>
-      <template v-for="(user, index) in users">
-        <div :key="index" class="flex items-center border-b border-white border-opacity-10" :class="user.selected ? 'bg-primary bg-opacity-60' : ''">
+      <template v-for="(user, index) in filteredUsers">
+        <div :key="index" class="flex items-center border-b border-white border-opacity-10" :class="{ 'bg-primary/60': user.selected, 'bg-red-500/40': user.Public.DisabledOnUTC }">
           <div class="w-12 px-4">
             <ui-checkbox v-model="user.selected" @input="(v) => toggleUserSelect(user, v)" />
           </div>
@@ -58,15 +68,103 @@ export default {
   data() {
     return {
       users: [],
-      isSelectedAll: false
+      showAll: false,
+      isSelectedAll: false,
+      processing: false
     }
   },
   computed: {
     roles() {
       return this.$store.state.settings.roles
+    },
+    filteredUsers() {
+      return this.users.filter((user) => {
+        if (this.showAll) return true
+        return !user.Public.DisabledOnUTC
+      })
+    },
+    usersSelected() {
+      return this.users.filter((u) => u.selected)
+    },
+    numDisabledUsersSelected() {
+      return this.usersSelected.filter((u) => u.Public.DisabledOnUTC).length
     }
   },
   methods: {
+    activateUsers() {
+      const promises = []
+      for (const user of this.usersSelected) {
+        if (!user.Public.DisabledOnUTC) continue
+        promises.push(
+          this.$axios.$post(`/api/auth/admin/user/${user.Public.UserID}/enable`, {}).then((result) => {
+            if (result.Error && result.Error !== 'NoError') {
+              console.error('Failed to enable user', user, result)
+              return false
+            } else {
+              user.Public.DisabledOnUTC = null
+              return true
+            }
+          })
+        )
+      }
+      this.processing = true
+      Promise.all(promises)
+        .then((results) => {
+          const usersEnabled = results.filter((r) => r).length
+          if (usersEnabled == 1) {
+            this.$toast.success('User enabled')
+          } else if (usersEnabled > 1) {
+            this.$toast.success(`${usersEnabled} Users enabled`)
+          } else {
+            this.$toast.error('Failed to enable users')
+          }
+        })
+        .catch((error) => {
+          console.error('Failed to enable users', error)
+          this.$toast.error('Failed to enable users')
+        })
+        .finally(() => {
+          this.processing = false
+          this.toggleSelectAll(false)
+        })
+    },
+    deactivateUsers() {
+      const promises = []
+      for (const user of this.usersSelected) {
+        if (user.Public.DisabledOnUTC) continue
+        promises.push(
+          this.$axios.$post(`/api/auth/admin/user/${user.Public.UserID}/disable`, {}).then((result) => {
+            if (result.Error && result.Error !== 'NoError') {
+              console.error('Failed to disable user', user, result)
+              return false
+            } else {
+              user.Public.DisabledOnUTC = new Date().toISOString()
+              return true
+            }
+          })
+        )
+      }
+      this.processing = true
+      Promise.all(promises)
+        .then((results) => {
+          const usersDisabled = results.filter((r) => r).length
+          if (usersDisabled == 1) {
+            this.$toast.success('User disabled')
+          } else if (usersDisabled > 1) {
+            this.$toast.success(`${usersDisabled} Users disabled`)
+          } else {
+            this.$toast.error('Failed to disable users')
+          }
+        })
+        .catch((error) => {
+          console.error('Failed to disable users', error)
+          this.$toast.error('Failed to disable users')
+        })
+        .finally(() => {
+          this.processing = false
+          this.toggleSelectAll(false)
+        })
+    },
     getRoleText(role) {
       if (role === 'owner') return 'Owner'
       const roleObj = this.roles.find((r) => r.value === role)

@@ -1,6 +1,6 @@
 <template>
   <div class="w-full h-full">
-    <component v-if="contentType" :is="componentName" :content="content" :stats="stats" />
+    <component v-if="contentType" :is="componentName" :content="content" :stats="_stats" />
   </div>
 </template>
 
@@ -26,6 +26,9 @@ export default {
     }
   },
   computed: {
+    _stats() {
+      return this.stats || {}
+    },
     contentType() {
       if (!this.content || !this.content.Data) return null
       if (this.content.Data.Written) return 'Written'
