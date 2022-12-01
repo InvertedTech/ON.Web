@@ -1,5 +1,5 @@
 <template>
-  <button class="outline-none ring-0 flex items-center justify-center" @click.stop="toggle">
+  <button class="outline-none ring-0 flex items-center justify-center" @click.stop.prevent="toggle">
     <span class="material-icons-outlined text-xl text-grayscale-900">{{ icon }}</span>
   </button>
 </template>

@@ -38,24 +38,26 @@
           <div class="w-12 px-4">
             <ui-checkbox v-model="user.selected" @input="(v) => toggleUserSelect(user, v)" />
           </div>
-          <div class="w-16 py-2 px-3">
-            <div class="w-10 h-10 rounded-full overflow-hidden shadow-lg">
-              <img :src="getProfileImageUrl(user.Public.UserID)" class="w-full h-full object-cover" />
-            </div>
-          </div>
-          <div class="flex-grow px-4">
-            <div class="flex items-center">
-              <p class="text-base text-gray-200">{{ user.Public.Data.DisplayName }}</p>
-              <p class="text-sm text-gray-400 px-4">@{{ user.Public.Data.UserName }}</p>
-            </div>
-          </div>
-          <div class="w-64 px-4">
-            <div class="flex flex-wrap">
-              <div v-for="role in user.Private.Roles" :key="role" class="py-0.5 px-1 mx-0.5 rounded-full bg-blue-500 text-white">
-                <p class="text-xs font-semibold text-center">{{ getRoleText(role) }}</p>
+          <nuxt-link :to="`/admin/members/${user.Public.UserID}/edit`" class="flex-grow flex items-center">
+            <div class="w-16 py-2 px-3">
+              <div class="w-10 h-10 rounded-full overflow-hidden shadow-lg">
+                <img :src="getProfileImageUrl(user.Public.UserID)" class="w-full h-full object-cover" />
               </div>
             </div>
-          </div>
+            <div class="flex-grow px-4">
+              <div class="flex items-center">
+                <p class="text-base text-gray-200">{{ user.Public.Data.DisplayName }}</p>
+                <p class="text-sm text-gray-400 px-4">@{{ user.Public.Data.UserName }}</p>
+              </div>
+            </div>
+            <div class="w-64 px-4">
+              <div class="flex flex-wrap">
+                <div v-for="role in user.Private.Roles" :key="role" class="py-0.5 px-1 mx-0.5 rounded-full bg-blue-500 text-white">
+                  <p class="text-xs font-semibold text-center">{{ getRoleText(role) }}</p>
+                </div>
+              </div>
+            </div>
+          </nuxt-link>
         </div>
       </template>
     </div>
@@ -84,7 +86,7 @@ export default {
       })
     },
     usersSelected() {
-      return this.users.filter((u) => u.selected)
+      return this.filteredUsers.filter((u) => u.selected)
     },
     numDisabledUsersSelected() {
       return this.usersSelected.filter((u) => u.Public.DisabledOnUTC).length
@@ -175,6 +177,7 @@ export default {
     },
     toggleSelectAll(v) {
       this.users = this.users.map((u) => {
+        if (!this.filteredUsers.some((_u) => _u.Public.UserID === u.Public.UserID)) return u
         u.selected = v
         return u
       })
