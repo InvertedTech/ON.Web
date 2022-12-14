@@ -49,8 +49,8 @@
         <div v-else-if="postType === 'Audio'">
           <div class="flex flex-col items-center">
             <p class="text-gray-100 text-sm my-2">Upload Audio</p>
-            <div class="w-28 min-w-28 h-28 flex items-center justify-center rounded-4xl text-grayscale-500 bg-grayscale-300 hover:bg-grayscale-400 hover:text-grayscale-600 cursor-pointer">
-              <span class="material-icons-outlined text-4xl">cloud_upload</span>
+            <div class="w-28 min-w-28 h-28">
+              <ui-asset-upload-input v-model="Audio.AudioAssetID" asset-type="Audio" accept="audio/mp3, audio/mp4" />
             </div>
           </div>
         </div>
