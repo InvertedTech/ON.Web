@@ -8,7 +8,7 @@
     <div class="p-4 w-full">
       <h2 class="text-2xl font-bold mb-2">{{ Title }}</h2>
       <div class="flex items-center py-1">
-        <p class="text-gray-300 font-bold text-sm pr-4">1,337 views</p>
+        <p class="text-gray-300 font-bold text-sm pr-4">{{ Views }} views</p>
         <p class="text-gray-300 font-bold text-sm">{{ publishDateDistance }} by {{ Author }}</p>
         <div class="flex-grow" />
         <div class="flex items-center cursor-pointer mx-3" :class="LikedByUser ? 'text-accent-darker hover:text-accent' : 'text-grayscale-900 hover:text-white'" @click.stop="likeClick">
@@ -28,7 +28,7 @@
         <ui-tag-pill v-for="tag in Tags" :key="tag" :tag="tag" class="mx-1" />
       </div>
       <div class="py-4">
-        <!-- <div v-html="HtmlBody" /> -->
+        <div class="rich-text prose prose-invert w-full" v-html="HtmlBody" />
       </div>
     </div>
   </div>
@@ -60,6 +60,9 @@ export default {
     },
     Title() {
       return this.ContentData.Title
+    },
+    HtmlBody() {
+      return this.ContentData.Video.HtmlBody
     },
     Author() {
       return this.ContentData.Author

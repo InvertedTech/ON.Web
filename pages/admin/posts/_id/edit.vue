@@ -45,13 +45,10 @@
           </div>
         </div>
 
-        <div v-if="postType === 'written'">
-          <ui-rich-text-editor v-model="Written.HtmlBody" name="body" label="Body" class="mb-4" />
-        </div>
-        <div v-else-if="postType === 'video'">
+        <div v-if="postType === 'Video'">
           <ui-text-input-with-label v-model="newPostVideoURL" name="video" label="Youtube Video URL or ID" class="mb-4" @blur="validateVideoURL" />
         </div>
-        <div v-else-if="postType === 'audio'">
+        <div v-else-if="postType === 'Audio'">
           <div class="flex flex-col items-center">
             <p class="text-gray-100 text-sm my-2">Upload Audio</p>
             <div class="w-28 min-w-28 h-28 flex items-center justify-center rounded-4xl text-grayscale-500 bg-grayscale-300 hover:bg-grayscale-400 hover:text-grayscale-600 cursor-pointer">
@@ -59,6 +56,11 @@
             </div>
           </div>
         </div>
+
+        <div class="py-2">
+          <ui-rich-text-editor v-model="HtmlBody" name="body" label="Body" class="mb-4" />
+        </div>
+
         <div class="flex justify-end py-4">
           <ui-btn type="submit">Save</ui-btn>
         </div>
@@ -84,7 +86,7 @@ export default {
   data() {
     return {
       processing: false,
-      postType: 'written',
+      postType: 'Written',
       newPost: {
         Title: '',
         Description: '',
@@ -108,7 +110,8 @@ export default {
         HtmlBody: '',
         AudioAssetID: ''
       },
-      newPostVideoURL: null
+      newPostVideoURL: null,
+      HtmlBody: ''
     }
   },
   computed: {
@@ -137,10 +140,10 @@ export default {
       return this.CMS.Categories || []
     },
     isWritten() {
-      return this.postType === 'written'
+      return this.postType === 'Written'
     },
     isVideo() {
-      return this.postType === 'video'
+      return this.postType === 'Video'
     },
     PublicContent() {
       return this.content.Public || {}
@@ -196,6 +199,7 @@ export default {
         payload.Public.Audio = this.Audio
         payload.Private.Audio = {}
       }
+      payload.Public[this.postType].HtmlBody = this.HtmlBody || ''
 
       this.$axios
         .$post(`/api/cms/admin/content/${this.PublicContent.ContentID}`, payload)
@@ -224,19 +228,20 @@ export default {
 
       if (this.PublicContentData.Written) {
         this.Written = { ...this.PublicContentData.Written }
-        this.postType = 'written'
+        this.postType = 'Written'
       }
       if (this.PublicContentData.Video) {
         this.Video = { ...this.PublicContentData.Video }
         if (this.Video.YoutubeVideoId) {
           this.newPostVideoURL = this.Video.YoutubeVideoId
         }
-        this.postType = 'video'
+        this.postType = 'Video'
       }
       if (this.PublicContentData.Audio) {
         this.Audio = { ...this.PublicContentData.Audio }
-        this.postType = 'audio'
+        this.postType = 'Audio'
       }
+      this.HtmlBody = this[this.postType].HtmlBody || ''
     }
   },
   mounted() {

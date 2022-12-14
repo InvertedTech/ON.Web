@@ -6,9 +6,9 @@
     </div>
     <div class="w-full max-w-3xl mx-auto">
       <div class="flex justify-center items-center mb-8">
-        <ui-icon-toggle-btn icon="play_circle" :selected="postType === 'video'" class="mx-4" @click="setPostType('video')" />
-        <ui-icon-toggle-btn icon="headphones" :selected="postType === 'audio'" class="mx-4" @click="setPostType('audio')" />
-        <ui-icon-toggle-btn icon="article" :selected="postType === 'written'" class="mx-4" @click="setPostType('written')" />
+        <ui-icon-toggle-btn icon="play_circle" :selected="postType === 'Video'" class="mx-4" @click="setPostType('Video')" />
+        <ui-icon-toggle-btn icon="headphones" :selected="postType === 'Audio'" class="mx-4" @click="setPostType('Audio')" />
+        <ui-icon-toggle-btn icon="article" :selected="postType === 'Written'" class="mx-4" @click="setPostType('Written')" />
       </div>
       <form @submit.prevent="submit">
         <ui-text-input-with-label v-model="newPost.Title" name="title" label="Title" class="mb-4" />
@@ -43,13 +43,10 @@
           </div>
         </div>
 
-        <div v-if="postType === 'written'">
-          <ui-rich-text-editor v-model="Written.HtmlBody" name="body" label="Body" class="mb-4" />
-        </div>
-        <div v-else-if="postType === 'video'">
+        <div v-if="postType === 'Video'">
           <ui-text-input-with-label v-model="newPostVideoURL" name="video" label="Youtube Video URL or ID" class="mb-4" @blur="validateVideoURL" />
         </div>
-        <div v-else-if="postType === 'audio'">
+        <div v-else-if="postType === 'Audio'">
           <div class="flex flex-col items-center">
             <p class="text-gray-100 text-sm my-2">Upload Audio</p>
             <div class="w-28 min-w-28 h-28 flex items-center justify-center rounded-4xl text-grayscale-500 bg-grayscale-300 hover:bg-grayscale-400 hover:text-grayscale-600 cursor-pointer">
@@ -57,6 +54,11 @@
             </div>
           </div>
         </div>
+
+        <div class="py-2">
+          <ui-rich-text-editor v-model="HtmlBody" name="body" label="Body" class="mb-4" />
+        </div>
+
         <div class="flex justify-end py-4">
           <ui-btn type="submit">Save</ui-btn>
         </div>
@@ -70,7 +72,7 @@ export default {
   data() {
     return {
       processing: false,
-      postType: 'written',
+      postType: 'Written',
       newPost: {
         Title: '',
         Description: '',
@@ -94,6 +96,7 @@ export default {
         HtmlBody: '',
         AudioAssetID: ''
       },
+      HtmlBody: '',
       newPostVideoURL: null
     }
   },
@@ -123,10 +126,10 @@ export default {
       return this.CMS.Categories || []
     },
     isWritten() {
-      return this.postType === 'written'
+      return this.postType === 'Written'
     },
     isVideo() {
-      return this.postType === 'video'
+      return this.postType === 'Video'
     }
   },
   methods: {
@@ -176,6 +179,7 @@ export default {
         payload.Public.Audio = this.Audio
         payload.Private.Audio = {}
       }
+      payload.Public[this.postType].HtmlBody = this.HtmlBody || ''
 
       this.$axios
         .$post('/api/cms/admin/content', payload)
