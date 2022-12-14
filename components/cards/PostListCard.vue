@@ -2,7 +2,10 @@
   <div class="px-8 py-2 w-full absolute top-0 left-0 cursor-pointer" @click.stop="clickCard">
     <div class="flex rounded-4xl px-6 py-4 bg-primary relative w-full">
       <div class="h-24 w-48 rounded-2xl border-4 overflow-hidden relative" :class="borderColorClass">
-        <img :src="featuredImageSrc" class="w-full h-full object-cover" />
+        <img v-if="featuredImageSrc" :src="featuredImageSrc" class="w-full h-full object-cover" />
+        <div v-else class="w-full h-full flex items-center justify-center">
+          <p class="text-sm text-grayscale-700">No Image</p>
+        </div>
 
         <div v-if="!isAvailableToUser" class="absolute top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center">
           <span class="material-icons-outlined text-white/80 text-3xl text-orange-300">lock</span>
@@ -94,7 +97,7 @@ export default {
       return 'play'
     },
     featuredImageSrc() {
-      if (!this.FeaturedImageAssetID) return 'https://picsum.photos/1200/800'
+      if (!this.FeaturedImageAssetID) return null
       const config = this.$config || this.$nuxt.$config
       return `${config.baseURL}/api/cms/asset/${this.FeaturedImageAssetID}/data`
     },

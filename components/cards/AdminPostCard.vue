@@ -1,7 +1,11 @@
 <template>
   <div class="flex rounded-4xl px-6 py-4 bg-primary">
     <nuxt-link :to="`/content/${ContentID}`" class="h-24 w-48 rounded-2xl border-4 border-blue-400 overflow-hidden relative">
-      <img :src="featuredImageSrc" class="w-full h-full object-cover" />
+      <img v-if="featuredImageSrc" :src="featuredImageSrc" class="w-full h-full object-cover" />
+      <div v-else class="w-full h-full flex items-center justify-center">
+        <p class="text-sm text-grayscale-700">No Image</p>
+      </div>
+
       <div class="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-40 hover:bg-opacity-0 text-white text-opacity-50 hover:text-opacity-0">
         <span class="material-icons-outlined text-4xl">{{ contentTypeIcon }}</span>
       </div>
@@ -59,7 +63,7 @@ export default {
       return 'play'
     },
     featuredImageSrc() {
-      if (!this.FeaturedImageAssetID) return 'https://picsum.photos/1200/800'
+      if (!this.FeaturedImageAssetID) return null
       return `${this.$config.baseURL}/api/cms/asset/${this.FeaturedImageAssetID}/data`
     }
   },
