@@ -8,7 +8,7 @@
           <p class="text-2xl font-bold text-center mb-2">{{ tier.Name }}</p>
 
           <p class="text-base text-center mb-4">
-            <span class="font-bold">${{ tier.Amount }}</span> /month
+            <span class="font-bold">${{ (tier.AmountCents / 100).toFixed(2) }}</span> /month
           </p>
 
           <div class="mb-6">
@@ -16,7 +16,7 @@
           </div>
 
           <div class="flex justify-center">
-            <nuxt-link :to="`/admin/subscriptions/plans/${tier.Amount}/edit`" class="bg-white rounded-md text-blue-500 text-xs px-6 py-2 font-bold flex items-center">Edit <span class="material-icons-outlined ml-2 text-base">edit</span></nuxt-link>
+            <nuxt-link :to="`/admin/subscriptions/plans/${tier.AmountCents}/edit`" class="bg-white rounded-md text-blue-500 text-xs px-6 py-2 font-bold flex items-center">Edit <span class="material-icons-outlined ml-2 text-base">edit</span></nuxt-link>
           </div>
         </div>
       </template>
@@ -37,7 +37,7 @@ export default {
     },
     TiersSorted() {
       const tiers = this.Tiers.map((t) => ({ ...t }))
-      tiers.sort((a, b) => a.Amount - b.Amount)
+      tiers.sort((a, b) => a.AmountCents - b.AmountCents)
       return tiers
     }
   },

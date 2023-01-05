@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="w-full md:w-1/2 p-2">
-        <ui-text-input-with-label v-model="newPlan.Amount" label="Price" />
+        <ui-text-input-with-label v-model="newPlan.AmountCents" label="Price (cents)" />
       </div>
     </div>
 
@@ -39,7 +39,7 @@ export default {
       newPlan: {
         Name: '',
         Description: '',
-        Amount: 0,
+        AmountCents: 0,
         Color: ''
       },
       colors: ['linear-gradient(180deg, #F44771 0%, #FD29B5 100%)', 'linear-gradient(180deg, #47B6F4 0%, #297EFD 100%)', 'linear-gradient(180deg, #7FF156 0%, #4FA261 100%)', 'linear-gradient(180deg, rgba(255,153,0,1) 0%, rgba(255,208,67,1) 100%)', 'linear-gradient(180deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%)', 'linear-gradient(180deg, rgba(102,0,255,1) 0%, rgba(139,67,255,1) 100%)']
