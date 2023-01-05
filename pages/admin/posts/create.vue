@@ -17,7 +17,7 @@
             <ui-text-input-with-label v-model="newPost.Author" name="author" label="Author" class="mb-4" />
           </div>
           <div class="w-full md:w-1/2 px-2">
-            <ui-dropdown v-model="newPost.SubscriptionLevel" :items="subscriptionTierItems" name="level" label="Level" class="mb-4" />
+            <ui-dropdown v-model="newPost.SubscriptionLevel" :items="subscriptionTierItems" name="level" label="Minimum Subscription Level" class="mb-4" />
           </div>
         </div>
         <div class="flex items-center flex-wrap -mx-2">
@@ -109,8 +109,8 @@ export default {
         .concat(
           this.SubscriptionTiers.map((sub, index) => {
             return {
-              text: '$' + sub.Amount + ' - ' + sub.Name,
-              value: sub.Amount
+              text: '$' + sub.AmountCents.toFixed(2) + ' - ' + sub.Name,
+              value: sub.AmountCents
             }
           })
         )
