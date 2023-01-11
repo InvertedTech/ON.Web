@@ -1,4 +1,7 @@
-FROM node:16.18.1-alpine
+FROM node:16.18.1-buster
+
+RUN apt update && apt install -y git
+RUN git clone https://github.com/ONFoundation/ON.Web.git app
 
 WORKDIR /app
 COPY package.json ./
