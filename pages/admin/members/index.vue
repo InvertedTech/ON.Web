@@ -12,6 +12,8 @@
       <ui-btn v-if="numDisabledUsersSelected" :disabled="processing" height="32px" class="mx-6" classes="bg-green-500 hover:bg-green-400 text-green-100 hover:text-green-50 disabled:bg-green-600/20 disabled:text-green-400/30" @click.stop="activateUsers"> Activate </ui-btn>
       <ui-btn v-if="usersSelected.length && !numDisabledUsersSelected" :disabled="processing" height="32px" class="mx-6" classes="bg-yellow-500 hover:bg-yellow-400 text-yellow-100 hover:text-yellow-50 disabled:bg-yellow-600/20 disabled:text-yellow-400/30" @click.stop="deactivateUsers"> Deactivate </ui-btn>
 
+      <ui-text-input v-model="searchValue" small placeholder="Search..." id="search" type="text" clearable append-icon="search" class="w-56 mx-6" />
+
       <div class="flex items-center">
         <ui-checkbox v-model="showAll" />
         <p class="pl-1 text-sm text-gray-200 cursor-pointer select-none" @click="showAll = !showAll">Show All</p>
@@ -19,21 +21,33 @@
     </div>
 
     <div class="w-full">
-      <div class="flex items-center border-b-2 border-white border-opacity-10">
+      <div class="flex items-center border-b-2 border-white border-opacity-10 py-4">
         <div class="w-12 px-4">
           <ui-checkbox :value="isSelectedAll" @input="toggleSelectAll" />
         </div>
-        <div class="w-16 py-2 px-3">
-          <p class="font-semibold text-sm text-gray-300">Image</p>
+        <div class="w-16 py-2 px-3"></div>
+        <div class="w-40 px-4">
+          <p class="font-semibold text-sm text-gray-300">Username</p>
         </div>
-        <div class="flex-grow px-4">
-          <p class="font-semibold text-sm text-gray-300">Name</p>
+        <div class="w-40 px-4">
+          <p class="font-semibold text-sm text-gray-300">Display Name</p>
         </div>
-        <div class="w-64 px-4">
+        <div class="w-32 px-4">
           <p class="font-semibold text-sm text-gray-300">Roles</p>
         </div>
+        <div class="w-24 px-4">
+          <p class="font-semibold text-sm text-gray-300">Value</p>
+        </div>
+        <div class="w-44 px-4">
+          <p class="font-semibold text-sm text-gray-300 flex items-center cursor-pointer select-none" @click.stop="clickSort('Public.CreatedOnUTC')">
+            Date Added <span v-if="sortBy == 'Public.CreatedOnUTC'" class="material-icons pl-0.5 text-white">{{ sortDesc ? 'arrow_drop_up' : 'arrow_drop_down' }}</span>
+          </p>
+        </div>
+        <div class="flex-grow px-4">
+          <p class="font-semibold text-sm text-gray-300">Email Address</p>
+        </div>
       </div>
-      <template v-for="(user, index) in filteredUsers">
+      <template v-for="(user, index) in sortedUsers">
         <div :key="index" class="flex items-center border-b border-white border-opacity-10" :class="{ 'bg-primary/60': user.selected, 'bg-red-500/40': user.Public.DisabledOnUTC }">
           <div class="w-12 px-4">
             <ui-checkbox v-model="user.selected" @input="(v) => toggleUserSelect(user, v)" />
@@ -44,17 +58,37 @@
                 <img :src="getProfileImageUrl(user.Public.UserID)" class="w-full h-full object-cover" />
               </div>
             </div>
-            <div class="flex-grow px-4">
+            <div class="w-40 px-4">
               <div class="flex items-center">
-                <p class="text-base text-gray-200">{{ user.Public.Data.DisplayName }}</p>
-                <p class="text-sm text-gray-400 px-4">@{{ user.Public.Data.UserName }}</p>
+                <p class="text-sm text-gray-200">@{{ user.Public.Data.UserName }}</p>
               </div>
             </div>
-            <div class="w-64 px-4">
-              <div class="flex flex-wrap">
-                <div v-for="role in user.Private.Roles" :key="role" class="py-0.5 px-1 mx-0.5 rounded-full bg-blue-500 text-white">
-                  <p class="text-xs font-semibold text-center">{{ getRoleText(role) }}</p>
+            <div class="w-40 px-4">
+              <div class="flex items-center">
+                <p class="text-sm text-gray-200">{{ user.Public.Data.DisplayName }}</p>
+              </div>
+            </div>
+            <div class="w-32 px-4">
+              <div class="flex items-center">
+                <div v-if="user.primaryRole" class="py-0.5 px-2 mx-0.5 rounded-full" :style="{ backgroundColor: user.primaryRole.color, color: user.primaryRole.textColor }">
+                  <p class="text-xs font-semibold text-center">{{ user.primaryRole.text }}</p>
                 </div>
+                <p v-if="user.Private.Roles.length > 1" class="text-xs text-white pl-1 italic">+{{ user.Private.Roles.length - 1 }}</p>
+              </div>
+            </div>
+            <div class="w-24 px-4">
+              <div class="flex items-center">
+                <p class="text-sm text-gray-200">$0.00</p>
+              </div>
+            </div>
+            <div class="w-44 px-4">
+              <div class="flex items-center">
+                <p class="text-sm text-gray-200">{{ user.Public.CreatedOnUTC ? $formatDate(new Date(user.Public.CreatedOnUTC), 'MMM d, yyyy kk:mm') : 'N/A' }}</p>
+              </div>
+            </div>
+            <div class="flex-grow px-4">
+              <div class="flex items-center">
+                <p class="text-sm text-gray-200">{{ user.Private.Data.Emails[0] || '' }}</p>
               </div>
             </div>
           </nuxt-link>
@@ -72,7 +106,10 @@ export default {
       users: [],
       showAll: false,
       isSelectedAll: false,
-      processing: false
+      processing: false,
+      sortBy: 'Public.CreatedOnUTC',
+      sortDesc: false,
+      searchValue: ''
     }
   },
   computed: {
@@ -81,8 +118,29 @@ export default {
     },
     filteredUsers() {
       return this.users.filter((user) => {
+        if (this.searchValue) {
+          // TODO: handle all filter values
+          const username = (user.Public.Data.UserName || '').toLowerCase()
+          const displayName = (user.Public.Data.DisplayName || '').toLowerCase()
+          if (!username.includes(this.searchValue.toLowerCase()) && !displayName.includes(this.searchValue.toLowerCase())) {
+            return false
+          }
+        }
         if (this.showAll) return true
         return !user.Public.DisabledOnUTC
+      })
+    },
+    sortedUsers() {
+      return this.filteredUsers.sort((a, b) => {
+        const value1 = this.sortBy.split('.').reduce((_a, _b) => _a[_b], a)
+        const value2 = this.sortBy.split('.').reduce((_a, _b) => _a[_b], b)
+        if (this.sortDesc) {
+          if (value1 < value2) return 1
+          else return -1
+        } else {
+          if (value1 < value2) return -1
+          else return 1
+        }
       })
     },
     usersSelected() {
@@ -93,6 +151,13 @@ export default {
     }
   },
   methods: {
+    clickSort(sortKey) {
+      if (this.sortBy === sortKey) {
+        this.sortDesc = !this.sortDesc
+      } else {
+        this.sortBy = sortKey
+      }
+    },
     activateUsers() {
       const promises = []
       for (const user of this.usersSelected) {
@@ -167,10 +232,14 @@ export default {
           this.toggleSelectAll(false)
         })
     },
-    getRoleText(role) {
-      if (role === 'owner') return 'Owner'
-      const roleObj = this.roles.find((r) => r.value === role)
-      return roleObj ? roleObj.text : 'Unknown'
+    getRoleIndex(role) {
+      return this.roles.findIndex((r) => r.value === role)
+    },
+    getPrimaryRole(roles) {
+      if (!roles || !roles.length) return null
+
+      const rolesSorted = [...roles].sort((a, b) => this.getRoleIndex(a) - this.getRoleIndex(b))
+      return this.roles.find((r) => r.value === rolesSorted[0])
     },
     getProfileImageUrl(userId) {
       return `${this.$config.baseURL}/api/auth/user/${userId}/profileimage`
@@ -191,6 +260,7 @@ export default {
         console.log('Loaded data', data)
         this.users = (data.Records || []).map((u) => {
           u.selected = false
+          u.primaryRole = this.getPrimaryRole(u.Private.Roles)
           return u
         })
       })

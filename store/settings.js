@@ -2,24 +2,40 @@ export const state = () => ({
   settings: null,
   roles: [
     {
+      text: 'Owner',
+      value: 'owner',
+      color: '#62AA76',
+      textColor: '#fff'
+    },
+    {
       text: 'Admin',
-      value: 'admin'
+      value: 'admin',
+      color: '#ad4545',
+      textColor: '#fff'
     },
     {
       text: 'Content Publisher',
-      value: 'con_publisher'
+      value: 'con_publisher',
+      color: 'rgb(59 130 246)',
+      textColor: '#fff'
     },
     {
       text: 'Content Writer',
-      value: 'con_writer'
+      value: 'con_writer',
+      color: 'rgb(59 130 246)',
+      textColor: '#fff'
     },
     {
       text: 'Comment Moderator',
-      value: 'com_mod'
+      value: 'com_mod',
+      color: '#e8c856',
+      textColor: '#000'
     },
     {
       text: 'Comment Appellate Judge',
-      value: 'com_appellate'
+      value: 'com_appellate',
+      color: '#e8c856',
+      textColor: '#000'
     }
   ]
 })

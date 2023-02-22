@@ -123,7 +123,7 @@ export default {
         .concat(
           this.SubscriptionTiers.map((sub, index) => {
             return {
-              text: '$' + sub.AmountCents.toFixed(2) + ' - ' + sub.Name,
+              text: '$' + (sub.AmountCents || 0).toFixed(2) + ' - ' + sub.Name,
               value: sub.AmountCents
             }
           })
