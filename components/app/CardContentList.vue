@@ -45,7 +45,6 @@ export default {
 
       var offsetX = x
       var offsetY = y
-      console.log('Card Height', this.cardHeight)
       this.cards.push({
         x,
         y,
@@ -76,7 +75,7 @@ export default {
     constructCards() {
       this.cardComponentRefs = new Array(this.posts.length)
       for (let i = 0; i < this.posts.length && i < 15; i++) {
-        console.log('Build post', this.posts[i])
+        // console.log('Build post', this.posts[i])
         this.buildCard(this.posts[i], i)
       }
 

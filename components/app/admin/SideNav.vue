@@ -16,7 +16,7 @@ export default {
   },
   computed: {
     wrapperClass() {
-      var classes = []
+      const classes = []
       if (this.isOpen) classes.push('translate-x-0')
       else classes.push('-translate-x-60')
       return classes.join(' ')

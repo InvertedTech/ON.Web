@@ -1,8 +1,6 @@
 <template>
   <div class="w-full">
-    <div class="flex h-full">
-      <!-- Left siderail -->
-      <app-side-nav />
+    <div class="flex h-full xl:pl-60">
       <!-- Primary content -->
       <div class="flex-grow px-5 py-5 bg-primary">
         <div id="content-list-wrapper" class="w-full bg-bg rounded-3xl py-4">

@@ -1,6 +1,7 @@
 import utils from '@/assets/js/utils'
 
 export const state = () => ({
+  isDrawerOpen: false
 })
 
 export const getters = {
@@ -21,4 +22,7 @@ export const actions = {
 }
 
 export const mutations = {
+  setDrawerOpen(state, val) {
+    state.isDrawerOpen = val
+  }
 }
