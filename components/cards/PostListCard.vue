@@ -1,7 +1,7 @@
 <template>
-  <div class="px-8 py-2 w-full absolute top-0 left-0 cursor-pointer" @click.stop="clickCard">
-    <div class="flex rounded-4xl px-6 py-4 bg-primary relative w-full">
-      <div class="h-24 w-48 rounded-2xl border-4 overflow-hidden relative" :class="borderColorClass">
+  <div class="py-2 px-4 absolute top-0 left-0 cursor-pointer" :style="{ width: width + 'px' }" @click.stop="clickCard">
+    <div class="rounded-4xl bg-primary relative w-full p-4">
+      <div class="aspect-[2] w-full rounded-3xl border-4 overflow-hidden relative mb-4" :class="borderColorClass">
         <img v-if="featuredImageSrc" :src="featuredImageSrc" class="w-full h-full object-cover" />
         <div v-else class="w-full h-full flex items-center justify-center">
           <p class="text-sm text-grayscale-700">No Image</p>
@@ -10,13 +10,19 @@
         <div v-if="!isAvailableToUser" class="absolute top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center">
           <span class="material-icons-outlined text-white/80 text-3xl text-orange-300">lock</span>
         </div>
-      </div>
-      <div class="flex-grow px-4 py-1">
-        <p class="font-bold mb-1 text-lg">{{ Title }}</p>
-        <p class="text-grayscale-700">{{ Description }}</p>
+
+        <div v-if="!isAvailableToUser" class="flex absolute bottom-0 left-0 py-5 px-5">
+          <div class="flex items-center text-orange-500 hover:text-orange-400 cursor-pointer">
+            <span class="material-icons-outlined" :style="{ fontSize: 1.1 * sizeMultiplier + 'rem' }">lock</span>
+            <p class="px-1 font-bold" :style="{ fontSize: 0.75 * sizeMultiplier + 'rem' }">Subscribe to unlock this content</p>
+          </div>
+        </div>
       </div>
 
-      <div v-if="isAvailableToUser" class="flex absolute bottom-0 left-56 py-5 px-2">
+      <p class="font-bold text-xl mb-1 px-2">{{ Title }}</p>
+      <p class="text-grayscale-600 text-sm px-2">{{ $dateDistanceFromNow(new Date(CreatedOnUTC)) }}</p>
+
+      <!-- <div v-if="isAvailableToUser" class="flex absolute bottom-0 left-56 py-5 px-2">
         <div>
           <div class="flex items-center text-accent-darker hover:text-accent cursor-pointer">
             <span class="material-icons-outlined" :style="{ fontSize: 0.9375 * sizeMultiplier + 'rem' }">library_add</span>
@@ -29,13 +35,7 @@
             <p class="px-1 font-bold" :style="{ fontSize: 0.75 * sizeMultiplier + 'rem' }">Share</p>
           </div>
         </div>
-      </div>
-      <div v-else class="flex absolute bottom-0 left-56 py-5 px-2">
-        <div class="flex items-center text-orange-500 hover:text-orange-400 cursor-pointer">
-          <span class="material-icons-outlined" :style="{ fontSize: 1.1 * sizeMultiplier + 'rem' }">lock</span>
-          <p class="px-1 font-bold" :style="{ fontSize: 0.75 * sizeMultiplier + 'rem' }">Subscribe to unlock this content</p>
-        </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -46,7 +46,8 @@ export default {
     post: {
       type: Object,
       default: () => {}
-    }
+    },
+    width: Number
   },
   data() {
     return {}

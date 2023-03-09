@@ -27,6 +27,7 @@ export default {
   ],
   plugins: [
     '@/plugins/init.client.js',
+    '@plugins/dateHelpers.js',
     '@/plugins/axios.js',
   ],
   components: true,

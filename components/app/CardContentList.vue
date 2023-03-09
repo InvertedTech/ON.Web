@@ -16,16 +16,23 @@ export default {
   data() {
     return {
       contentWidth: 0,
-      cardsPerRow: 1,
+      cardsPerRow: 2,
       cardComponentRefs: [],
       cards: []
     }
   },
-  computed: {},
+  computed: {
+    cardWidth() {
+      return Math.floor(this.contentWidth / this.cardsPerRow)
+    },
+    cardHeight() {
+      return this.cardWidth / 2 + 100
+    }
+  },
   methods: {
     buildCard(post, index) {
-      var w = Math.floor(this.contentWidth / this.cardsPerRow)
-      var h = 144 // Temp hardcode
+      var w = this.cardWidth
+      var h = this.cardHeight
 
       var row = Math.floor(index / this.cardsPerRow)
       var col = index % this.cardsPerRow
@@ -34,7 +41,8 @@ export default {
       var y = row * h
 
       var cardHeight = h
-      var cardWidth = 847 // Temp hardcode
+      var cardWidth = w
+
       var offsetX = x
       var offsetY = y
 
@@ -72,7 +80,7 @@ export default {
         this.buildCard(this.posts[i], i)
       }
 
-      window.cardcontent.style.height = `${this.posts.length * 144 + 100}px`
+      window.cardcontent.style.height = `${(this.posts.length / this.cardsPerRow) * this.cardHeight}px`
     },
     destroyCards() {
       this.cardComponentRefs.forEach((ref) => {
@@ -85,13 +93,14 @@ export default {
       this.cards = []
     },
     resize() {
-      this.contentWidth = window.cardcontent.clientWidth
+      this.contentWidth = window.cardcontent.clientWidth - 16
       this.destroyCards()
       this.constructCards()
     }
   },
   updated() {
-    this.contentWidth = window.cardcontent.clientWidth
+    this.contentWidth = window.cardcontent.clientWidth - 16
+
     if (!this.cardComponentRefs.length) {
       this.constructCards()
     }
@@ -99,7 +108,8 @@ export default {
   mounted() {
     window.addEventListener('resize', this.resize)
 
-    this.contentWidth = window.cardcontent.clientWidth
+    this.contentWidth = window.cardcontent.clientWidth - 16
+
     this.constructCards()
   },
   beforeDestroy() {
