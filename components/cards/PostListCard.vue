@@ -19,23 +19,10 @@
         </div>
       </div>
 
-      <p class="font-bold text-xl mb-1 px-2">{{ Title }}</p>
+      <ui-tooltip :disabled="!isTitleTruncated" :max-width="width" :text="Title" direction="top">
+        <p ref="title" class="font-bold text-xl mb-1 px-2 truncate">{{ Title }}</p>
+      </ui-tooltip>
       <p class="text-grayscale-600 text-sm px-2">{{ $dateDistanceFromNow(new Date(CreatedOnUTC)) }}</p>
-
-      <!-- <div v-if="isAvailableToUser" class="flex absolute bottom-0 left-56 py-5 px-2">
-        <div>
-          <div class="flex items-center text-accent-darker hover:text-accent cursor-pointer">
-            <span class="material-icons-outlined" :style="{ fontSize: 0.9375 * sizeMultiplier + 'rem' }">library_add</span>
-            <p class="px-1 font-bold" :style="{ fontSize: 0.75 * sizeMultiplier + 'rem' }">Save</p>
-          </div>
-        </div>
-        <div class="pl-4">
-          <div class="flex items-center text-accent-darker hover:text-accent cursor-pointer">
-            <span class="material-icons-outlined" :style="{ fontSize: 0.9375 * sizeMultiplier + 'rem' }">ios_share</span>
-            <p class="px-1 font-bold" :style="{ fontSize: 0.75 * sizeMultiplier + 'rem' }">Share</p>
-          </div>
-        </div>
-      </div> -->
     </div>
   </div>
 </template>
@@ -50,7 +37,9 @@ export default {
     width: Number
   },
   data() {
-    return {}
+    return {
+      isTitleTruncated: false
+    }
   },
   computed: {
     sizeMultiplier() {
@@ -115,8 +104,14 @@ export default {
       } else {
         router.push(`/plans`)
       }
+    },
+    checkTruncated() {
+      const ref = this.$refs.title
+      this.isTitleTruncated = ref && ref.offsetWidth < ref.scrollWidth
     }
   },
-  mounted() {}
+  mounted() {
+    this.$nextTick(this.checkTruncated)
+  }
 }
 </script>

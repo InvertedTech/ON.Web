@@ -17,7 +17,9 @@
               <div class="w-full aspect-[2] rounded-2xl border-4 overflow-hidden relative mb-2">
                 <img v-if="content.FeaturedImageAssetID" :src="`${$config.baseURL}/api/cms/asset/${content.FeaturedImageAssetID}/data`" class="w-full h-full object-cover" />
               </div>
-              <p class="px-1 text-sm font-bold">{{ content.Title }}</p>
+              <ui-tooltip :text="content.Title" direction="bottom">
+                <p class="px-1 text-sm font-bold truncate">{{ content.Title }}</p>
+              </ui-tooltip>
               <p class="text-grayscale-600 text-xs px-1">{{ dateDistanceFromNow(new Date(content.CreatedOnUTC)) }}</p>
             </div>
           </nuxt-link>

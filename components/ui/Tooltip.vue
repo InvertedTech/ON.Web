@@ -1,0 +1,130 @@
+<template>
+  <div ref="box" @mouseover="mouseover" @mouseleave="mouseleave">
+    <slot />
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    text: {
+      type: [String, Number],
+      required: true
+    },
+    direction: {
+      type: String,
+      default: 'right'
+    },
+    maxWidth: {
+      type: Number,
+      default: 320
+    },
+    disabled: Boolean
+  },
+  data() {
+    return {
+      tooltip: null,
+      tooltipId: null,
+      isShowing: false,
+      hideTimeout: null
+    }
+  },
+  watch: {
+    text() {
+      this.updateText()
+    },
+    disabled(newVal) {
+      if (newVal && this.isShowing) {
+        this.hideTooltip()
+      }
+    }
+  },
+  methods: {
+    updateText() {
+      if (this.tooltip) {
+        this.tooltip.innerHTML = this.text
+        this.setTooltipPosition(this.tooltip)
+      }
+    },
+    createTooltip() {
+      if (!this.$refs.box) return
+      var tooltip = document.createElement('div')
+      this.tooltipId = String(Math.floor(Math.random() * 10000))
+      tooltip.id = this.tooltipId
+      tooltip.className = 'tooltip-wrapper absolute px-2 py-1 text-white text-xs rounded shadow-lg text-center hidden sm:block'
+      tooltip.style.zIndex = 100
+      tooltip.style.backgroundColor = 'rgba(0,0,0,0.85)'
+      tooltip.style.maxWidth = this.maxWidth + 'px'
+      tooltip.innerHTML = this.text
+      tooltip.addEventListener('mouseover', this.cancelHide)
+      tooltip.addEventListener('mouseleave', this.hideTooltip)
+
+      this.setTooltipPosition(tooltip)
+
+      this.tooltip = tooltip
+    },
+    setTooltipPosition(tooltip) {
+      var boxChow = this.$refs.box.getBoundingClientRect()
+
+      var shouldMount = !tooltip.isConnected
+      // Calculate size of tooltip
+      if (shouldMount) document.body.appendChild(tooltip)
+      var { width, height } = tooltip.getBoundingClientRect()
+      if (shouldMount) tooltip.remove()
+
+      var top = 0
+      var left = 0
+      if (this.direction === 'right') {
+        top = boxChow.top - height / 2 + boxChow.height / 2
+        left = boxChow.left + boxChow.width + 4
+      } else if (this.direction === 'bottom') {
+        top = boxChow.top + boxChow.height + 4
+        left = boxChow.left - width / 2 + boxChow.width / 2
+      } else if (this.direction === 'top') {
+        top = boxChow.top - height - 4
+        left = boxChow.left - width / 2 + boxChow.width / 2
+      } else if (this.direction === 'left') {
+        top = boxChow.top - height / 2 + boxChow.height / 2
+        left = boxChow.left - width - 4
+      }
+      tooltip.style.top = top + 'px'
+      tooltip.style.left = left + 'px'
+    },
+    showTooltip() {
+      if (this.disabled) return
+      if (!this.tooltip) {
+        this.createTooltip()
+        if (!this.tooltip) return
+      }
+      if (!this.$refs.box) return // Ensure element is not destroyed
+      try {
+        document.body.appendChild(this.tooltip)
+        this.setTooltipPosition(this.tooltip)
+      } catch (error) {
+        console.error(error)
+      }
+
+      this.isShowing = true
+    },
+    hideTooltip() {
+      if (!this.tooltip) return
+      this.tooltip.remove()
+      this.isShowing = false
+    },
+    cancelHide() {
+      if (this.hideTimeout) clearTimeout(this.hideTimeout)
+    },
+    mouseover() {
+      if (!this.isShowing) this.showTooltip()
+    },
+    mouseleave() {
+      if (this.isShowing) {
+        this.hideTimeout = setTimeout(this.hideTooltip, 100)
+      }
+    }
+  },
+  beforeDestroy() {
+    this.hideTooltip()
+  }
+}
+</script>

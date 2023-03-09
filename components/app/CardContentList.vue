@@ -26,7 +26,7 @@ export default {
       return Math.floor(this.contentWidth / this.cardsPerRow)
     },
     cardHeight() {
-      return this.cardWidth / 2 + 100
+      return this.cardWidth / 2 + 84
     }
   },
   methods: {
@@ -45,7 +45,7 @@ export default {
 
       var offsetX = x
       var offsetY = y
-
+      console.log('Card Height', this.cardHeight)
       this.cards.push({
         x,
         y,
@@ -80,7 +80,7 @@ export default {
         this.buildCard(this.posts[i], i)
       }
 
-      window.cardcontent.style.height = `${(this.posts.length / this.cardsPerRow) * this.cardHeight}px`
+      window.cardcontent.style.height = `${Math.ceil(this.posts.length / this.cardsPerRow) * this.cardHeight}px`
     },
     destroyCards() {
       this.cardComponentRefs.forEach((ref) => {
