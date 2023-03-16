@@ -1,9 +1,9 @@
 <template>
   <div class="relative" v-click-outside="clickOutside">
-    <button class="w-20 h-10 bg-accent rounded-full focus:outline-none flex items-center justify-between pl-2" @click.stop.prevent="showMenu = !showMenu">
-      <span class="material-icons text-black text-3xl pt-0.5 duration-200 transform origin-center" :class="{ 'rotate-180': showMenu }">expand_more</span>
-      <div class="w-10 h-10 p-1">
-        <div class="w-8 h-8 rounded-full overflow-hidden">
+    <button class="w-16 sm:w-20 h-8 sm:h-10 bg-accent rounded-full focus:outline-none flex items-center justify-between pl-2" @click.stop.prevent="showMenu = !showMenu">
+      <span class="material-icons text-black text-2xl sm:text-3xl pt-0.5 duration-200 transform origin-center" :class="{ 'rotate-180': showMenu }">expand_more</span>
+      <div class="w-10 h-8 sm:h-10 p-0.5 sm:p-1">
+        <div class="w-7 sm:w-8 h-7 sm:h-8 rounded-full overflow-hidden">
           <img :src="profileImageUrl" class="w-full h-full object-cover" />
         </div>
       </div>

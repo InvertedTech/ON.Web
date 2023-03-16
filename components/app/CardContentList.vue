@@ -16,7 +16,6 @@ export default {
   data() {
     return {
       contentWidth: 0,
-      cardsPerRow: 2,
       cardComponentRefs: [],
       cards: []
     }
@@ -27,6 +26,9 @@ export default {
     },
     cardHeight() {
       return this.cardWidth / 2 + 84
+    },
+    cardsPerRow() {
+      return this.contentWidth < 750 ? 1 : 2
     }
   },
   methods: {
@@ -93,6 +95,7 @@ export default {
     },
     resize() {
       this.contentWidth = window.cardcontent.clientWidth - 16
+
       this.destroyCards()
       this.constructCards()
     }

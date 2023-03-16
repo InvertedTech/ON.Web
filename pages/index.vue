@@ -58,6 +58,11 @@ export default {
 
 <style>
 #content-list-wrapper {
-  min-height: calc(100vh - 40px - 80px);
+  min-height: calc(100vh - 40px - 64px);
+}
+@media (min-width: 640px) {
+  #content-list-wrapper {
+    min-height: calc(100vh - 40px - 80px);
+  }
 }
 </style>
