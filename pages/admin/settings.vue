@@ -1,19 +1,16 @@
 <template>
-  <div class="w-full p-6">
-    <div class="w-full flex mt-4 mb-6">
-      <div class="w-1/3">
-        <nuxt-link to="/admin/settings" class="flex items-center justify-center rounded-l-2xl py-2.5 font-semibold" :class="routePath === '/admin/settings' ? 'bg-accent/90 text-black/60' : 'bg-grayscale-400/80 text-white/60'">Website</nuxt-link>
+  <div class="w-full h-[calc(100%-64px)] lg:h-full">
+    <div class="flex h-full">
+      <div class="w-48 p-6">
+        <template v-for="item in NavItems">
+          <app-bar-side-nav-item :to="item.to" :key="item.name" :text="item.name" small :selected="pageRoute == item.to" :icon="item.icon" />
+        </template>
       </div>
-      <div class="w-1/3 border-x border-x-white/20">
-        <nuxt-link to="/admin/settings/content" class="flex items-center justify-center py-2.5 font-semibold" :class="routePath === '/admin/settings/content' ? 'bg-accent/90 text-black/60' : 'bg-grayscale-400/80 text-white/60'">Content</nuxt-link>
+      <div class="flex-grow h-full border-l border-l-grayscale-400">
+        <div class="w-full max-w-4xl mx-auto px-6 py-10">
+          <nuxt-child />
+        </div>
       </div>
-      <div class="w-1/3">
-        <nuxt-link to="/admin/settings/notifications" class="flex items-center justify-center rounded-r-2xl py-2.5 font-semibold" :class="routePath === '/admin/settings/notifications' ? 'bg-accent/90 text-black/60' : 'bg-grayscale-400/80 text-white/60'">Notifications</nuxt-link>
-      </div>
-    </div>
-
-    <div class="w-full max-w-4xl mx-auto p-4">
-      <nuxt-child />
     </div>
   </div>
 </template>
@@ -25,6 +22,37 @@ export default {
   },
   computed: {
     routePath() {
+      return this.$route.path
+    },
+    NavItems() {
+      return [
+        {
+          name: 'Website',
+          to: '/admin/settings'
+        },
+        {
+          name: 'Content',
+          to: '/admin/settings/content'
+        },
+        {
+          name: 'Navigation',
+          to: '/admin/settings/navigation'
+        },
+        {
+          name: 'Payment',
+          to: '/admin/settings/payment'
+        },
+        {
+          name: 'Notifications',
+          to: '/admin/settings/notifications'
+        },
+        {
+          name: 'Comments',
+          to: '/admin/settings/comments'
+        }
+      ]
+    },
+    pageRoute() {
       return this.$route.path
     }
   },
