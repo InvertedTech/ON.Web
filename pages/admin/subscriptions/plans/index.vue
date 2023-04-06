@@ -1,47 +1,64 @@
 <template>
   <div class="w-full p-6">
+    <ui-btn class="w-40 mb-4" @click="createNewPlan">New Plan</ui-btn>
+
     <div class="flex flex-wrap mb-4 -mx-2">
       <template v-for="(tier, index) in TiersSorted">
-        <div :key="index" class="w-64 rounded-2xl p-6 text-white m-2" :style="{ background: tier.Color }">
-          <img src="/icons/crown.svg" class="h-8 mx-auto mb-4" />
+        <div :key="index" class="w-64 relative rounded-2xl px-6 py-12 text-white bg-primary m-2" :style="{ border: `4px solid ${tier.Color}` }">
+          <div class="absolute inset-0 w-full h-full pointer-events-auto opacity-10" :style="{ backgroundColor: tier.Color }" />
 
-          <p class="text-2xl font-bold text-center mb-2">{{ tier.Name }}</p>
-
-          <p class="text-base text-center mb-4">
-            <span class="font-bold">${{ (tier.AmountCents / 100).toFixed(2) }}</span> /month
+          <p class="text-2xl text-center mb-6 font-bold">
+            ${{ (tier.AmountCents / 100).toFixed(2) }}
+            <!-- <span class="font-bold">${{ (tier.AmountCents / 100).toFixed(2) }}</span> /month -->
           </p>
 
-          <div class="mb-6">
-            <div class="rich-text prose prose-sm prose-invert text-white" v-html="tier.Description" />
-          </div>
+          <p class="text-xl text-center mb-6">{{ tier.Name }}</p>
 
-          <div class="flex justify-center">
-            <nuxt-link :to="`/admin/subscriptions/plans/${tier.AmountCents}/edit`" class="bg-white rounded-md text-blue-500 text-xs px-6 py-2 font-bold flex items-center">Edit <span class="material-icons-outlined ml-2 text-base">edit</span></nuxt-link>
-          </div>
+          <div class="rich-text prose prose-sm prose-invert text-white text-center" v-html="tier.Description" />
         </div>
       </template>
     </div>
 
-    <ui-btn to="/admin/subscriptions/plans/create">New Plan</ui-btn>
+    <modals-subscription-plan-modal v-model="showPlanModal" :plan="selectedPlan" />
   </div>
 </template>
 
 <script>
 export default {
   data() {
-    return {}
+    return {
+      showPlanModal: false,
+      selectedPlan: null
+    }
   },
   computed: {
     Tiers() {
       return this.$store.getters['settings/SubscriptionTiers']
     },
     TiersSorted() {
-      const tiers = this.Tiers.map((t) => ({ ...t }))
+      const tiers = this.Tiers.map((t) => {
+        const _t = {
+          ...t
+        }
+        if (_t.Color.includes('linear-gradient')) {
+          _t.Color = '#897458'
+        }
+        return _t
+      })
       tiers.sort((a, b) => a.AmountCents - b.AmountCents)
       return tiers
     }
   },
-  methods: {},
+  methods: {
+    createNewPlan() {
+      this.selectedPlan = null
+      this.showPlanModal = true
+    },
+    editPlan(plan) {
+      this.selectedPlan = plan
+      this.showPlanModal = true
+    }
+  },
   mounted() {}
 }
 </script>

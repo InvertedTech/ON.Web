@@ -84,6 +84,10 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Inter', ...defaultTheme.fontFamily.sans]
+      },
+      zIndex: {
+        '50': 50,
+        '60': 60
       }
     }
   },

@@ -1,7 +1,7 @@
 <template>
   <div class="w-full">
     <label :for="inputId" class="mb-0.5 text-gray-300">{{ label }}</label>
-    <ui-text-input ref="textInput" v-model="input" :type="type" :id="inputId" :readonly="readonly" @blur="blur" @keyup="keyup" />
+    <ui-text-input ref="textInput" v-model="input" :type="type" :id="inputId" :readonly="readonly" :step="step" @blur="blur" @keyup="keyup" />
     <span v-if="errorMessage" class="text-red-600 text-xs pl-1">{{ errorMessage }}</span>
   </div>
 </template>
@@ -20,7 +20,8 @@ export default {
     validation: {
       type: Function,
       default: () => ''
-    }
+    },
+    step: String
   },
   data() {
     return {

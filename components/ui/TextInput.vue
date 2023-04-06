@@ -1,6 +1,6 @@
 <template>
   <div :style="{ height }" class="relative">
-    <input v-model="input" :type="type" :id="id" :readonly="readonly" :placeholder="placeholder" class="text-input border border-stroke focus:border-grayscale-600 focus:outline-none w-full h-full text-text bg-primary focus:bg-grayscale-400" :style="{ padding, fontSize, borderRadius }" @blur="blur" @keyup="keyup" />
+    <input v-model="input" :type="type" :id="id" :readonly="readonly" :step="step" :placeholder="placeholder" class="text-input border border-stroke focus:border-grayscale-600 focus:outline-none w-full h-full text-text bg-primary focus:bg-grayscale-400" :style="{ padding, fontSize, borderRadius }" @blur="blur" @keyup="keyup" />
 
     <div v-if="input && clearable" class="pointer-events-none h-full absolute top-0 right-0 px-2 flex items-center">
       <span class="material-icons pointer-events-auto cursor-pointer" @click.stop="clearInput">close</span>
@@ -24,7 +24,8 @@ export default {
     readonly: Boolean,
     clearable: Boolean,
     small: Boolean,
-    appendIcon: String
+    appendIcon: String,
+    step: String
   },
   data() {
     return {}
@@ -52,7 +53,7 @@ export default {
     },
     borderRadius() {
       if (this.small) return '4px'
-      return '12px'
+      return '8px'
     }
   },
   methods: {

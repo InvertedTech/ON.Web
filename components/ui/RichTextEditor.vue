@@ -2,7 +2,7 @@
   <div>
     <label v-if="label" class="text-gray-300 mb-2" :for="inputId">{{ label }}</label>
     <client-only>
-      <div v-if="editor" class="flex items-center border-t border-b border-grayscale-500 py-1 mb-4">
+      <div v-if="editor" class="flex items-center border border-grayscale-500 bg-primary py-1 px-3 rounded-t-lg">
         <ui-editor-icon-btn icon="undo" class="mx-1" :disabled="!editor.can().chain().focus().undo().run()" @click="editor.chain().focus().undo().run()" />
         <ui-editor-icon-btn icon="redo" class="mx-1" :disabled="!editor.can().chain().focus().redo().run()" @click="editor.chain().focus().redo().run()" />
 
@@ -33,7 +33,7 @@
         <button @click="editor.chain().focus().setHorizontalRule().run()">horizontal rule</button>
         <button @click="editor.chain().focus().setHardBreak().run()">hard break</button> -->
       </div>
-      <div class="min-h-[120px] w-full cursor-text" @click="setFocus">
+      <div class="min-h-[120px] w-full cursor-text p-4 border-b border-x border-grayscale-500 bg-primary rounded-b-lg" @click="setFocus">
         <div @click.stop.prevent>
           <editor-content :editor="editor" />
         </div>
