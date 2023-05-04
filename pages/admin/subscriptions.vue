@@ -11,22 +11,13 @@
         <div :key="index" class="w-64 relative rounded-2xl px-6 py-12 text-white bg-primary m-2" :style="{ border: `4px solid ${tier.Color}` }">
           <div class="absolute inset-0 w-full h-full pointer-events-auto opacity-10" :style="{ backgroundColor: tier.Color }" />
 
-          <p class="text-2xl text-center mb-6 font-bold">
-            ${{ (tier.AmountCents / 100).toFixed(2) }}
-            <!-- <span class="font-bold">${{ (tier.AmountCents / 100).toFixed(2) }}</span> /month -->
-          </p>
+          <p class="text-2xl text-center mb-6 font-bold">${{ (tier.AmountCents / 100).toFixed(2) }}</p>
 
           <p class="text-xl text-center mb-6">{{ tier.Name }}</p>
 
           <div class="rich-text prose prose-sm prose-invert text-white text-center" v-html="tier.Description" />
 
-          <div class="absolute inset-0 w-full h-full opacity-0 hover:opacity-100 flex items-center bg-primary/90 rounded-2xl">
-            <div class="w-full flex items-center justify-center">
-              <button class="mx-2" @click="editPlan(tier)"><span class="material-icons text-4xl">edit</span></button>
-
-              <button class="mx-2"><span class="material-icons text-4xl">delete</span></button>
-            </div>
-          </div>
+          <div class="absolute inset-0 w-full h-full opacity-0 hover:opacity-100 flex items-center bg-primary/20 rounded-2xl cursor-pointer" @click.stop="editPlan(tier)"></div>
         </div>
       </template>
     </div>

@@ -72,6 +72,9 @@ export default {
     },
     modalWidth() {
       return typeof this.width === 'string' ? this.width : this.width + 'px'
+    },
+    showingConfirmPrompt() {
+      return this.$store.state.globals.showConfirmPrompt
     }
   },
   methods: {
@@ -86,6 +89,7 @@ export default {
     },
     clickBg(ev) {
       if (!this.show) return
+      if (this.showingConfirmPrompt) return
       if (this.preventClickoutside) {
         this.preventClickoutside = false
         return

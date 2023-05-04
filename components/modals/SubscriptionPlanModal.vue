@@ -22,8 +22,9 @@
         <ui-rich-text-editor v-model="newPlan.Description" name="description" label="Description" class="mb-4" />
 
         <div class="flex pt-4 px-2">
+          <ui-btn v-if="plan" classes="bg-error hover:bg-error-darken text-error-darken hover:text-grayscale-300 disabled:bg-error-darker/20 disabled:text-error-darken/30" type="button" @click.stop="deleteClick">Delete</ui-btn>
           <div class="flex-grow" />
-          <ui-btn color="success" type="submit">Save</ui-btn>
+          <ui-btn type="submit">Save</ui-btn>
         </div>
       </div>
     </form>
@@ -71,6 +72,42 @@ export default {
     }
   },
   methods: {
+    deleteClick() {
+      const payload = {
+        message: `Delete subscription plan ${this.plan.Name}?`,
+        yesButtonText: 'Delete',
+        yesButtonColor: 'error',
+        confirmDeleteText: this.plan.Name,
+        callback: (confirmed) => {
+          if (confirmed) {
+            this.delete()
+          }
+        },
+        type: 'yesNo'
+      }
+      this.$store.commit('globals/setConfirmPrompt', payload)
+    },
+    delete() {
+      const payload = {
+        Data: {
+          Tiers: this.Tiers.filter((t) => t.AmountCents != this.plan.AmountCents)
+        }
+      }
+      this.$axios
+        .$post(`/api/settings/subscription/public`, payload)
+        .then(() => {
+          this.$store.commit('settings/updateTiers', payload.Data.Tiers)
+          this.$toast.success('Subscription plan deleted')
+          this.show = false
+        })
+        .catch((error) => {
+          console.error('Failed', error)
+          this.$toast.error('Failed to delete plan')
+        })
+        .finally(() => {
+          this.processing = false
+        })
+    },
     validateForm() {
       if (this.newPlan.Amount) {
         this.newPlan.AmountCents = Math.round(Number(this.newPlan.Amount) * 100)

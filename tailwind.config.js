@@ -45,6 +45,8 @@ module.exports = {
         accent: '#94FFB2',
         'accent-darker': '#62AA76',
         skyblue: '#2F9FF8',
+        error: '#FF5252',
+        'error-darker': '#d42f2f',
         grayscale: {
           50: '#101010',
           100: '#111111',

@@ -4,6 +4,8 @@
     <div id="content" class="overflow-y-auto overflow-hidden">
       <Nuxt />
     </div>
+
+    <modals-confirm-prompt />
   </div>
 </template>
 
