@@ -5,6 +5,11 @@
       <div class="flex-grow pr-5 bg-primary">
         <div id="content-container" class="w-full bg-bg">
           <app-post-view :content="content" :stats="stats" />
+
+          <!-- Comment section -->
+          <div class="w-full max-w-3xl mx-auto">
+            <comments-comment-section :content-id="contentId" :comments="commentRecords" />
+          </div>
         </div>
       </div>
       <!-- Right siderail -->
@@ -47,8 +52,14 @@ export default {
       console.error('Failed to get stats', error)
       return null
     })
+    const comments = await app.$axios.$get(`/api/comment/content/${params.id}?PageSize=50`).catch((error) => {
+      console.error('Failed to get comments', error)
+      return null
+    })
     return {
+      contentId: params.id,
       content: response.Record,
+      comments,
       relatedContent: related?.Records || [],
       stats
     }
@@ -56,7 +67,11 @@ export default {
   data() {
     return {}
   },
-  computed: {},
+  computed: {
+    commentRecords() {
+      return this.comments?.Records || []
+    }
+  },
   methods: {
     dateDistanceFromNow(date) {
       if (!this.$dateDistanceFromNow) return ''
@@ -67,6 +82,7 @@ export default {
     console.log('content', this.content)
     console.log('relatedContent', this.relatedContent)
     console.log('stats', this.stats)
+    console.log('comments', this.comments)
   }
 }
 </script>

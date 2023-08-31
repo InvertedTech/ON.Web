@@ -25,6 +25,10 @@ export default {
       type: String,
       default: 'primary'
     },
+    textColor: {
+      type: String,
+      default: 'white'
+    },
     type: {
       type: String,
       default: ''
@@ -42,7 +46,7 @@ export default {
     classList() {
       var list = []
       if (this.loading) list.push('text-opacity-0')
-      list.push('text-white')
+      list.push(`text-${this.textColor}`)
       list.push(`bg-${this.color}`)
       if (this.small) {
         list.push('text-sm')

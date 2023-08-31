@@ -8,10 +8,10 @@
       <div class="flex items-center py-1">
         <p class="text-gray-300 font-bold text-sm">{{ publishDateDistance }} by {{ Author }}</p>
         <div class="flex-grow" />
-        <div class="flex items-center cursor-pointer mx-3" :class="LikedByUser ? 'text-accent-darker hover:text-accent' : 'text-grayscale-900 hover:text-white'" @click.stop="likeClick">
+        <button class="flex items-center mx-3" :class="LikedByUser ? 'text-accent-darker hover:text-accent' : 'text-grayscale-900 hover:text-white'" @click.stop="likeClick">
           <span class="material-icons-outlined text-2xl">favorite_border</span>
           <p class="pl-1.5 text-sm font-bold">{{ Likes || 'Like' }}</p>
-        </div>
+        </button>
         <div class="flex items-center text-grayscale-900 hover:text-white cursor-pointer mx-3">
           <span class="material-icons-outlined text-2xl">share</span>
           <p class="pl-1.5 text-sm font-bold">Share</p>
@@ -25,7 +25,7 @@
         <ui-tag-pill v-for="tag in Tags" :key="tag" :tag="tag" class="mx-1" />
       </div>
       <div class="py-4">
-        <div class="rich-text prose prose-invert w-full" v-html="HtmlBody" />
+        <div class="rich-text prose prose-invert w-full max-w-none" v-html="HtmlBody" />
       </div>
     </div>
   </div>

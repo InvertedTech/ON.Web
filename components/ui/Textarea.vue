@@ -1,5 +1,5 @@
 <template>
-  <textarea v-model="input" :id="id" :readonly="readonly" :cols="cols" class="textarea border border-stroke focus:border-grayscale-600 focus:outline-none w-full text-base text-text bg-primary px-5 py-3 focus:bg-grayscale-400 rounded-xl" />
+  <textarea ref="textarea" v-model="input" :id="id" :readonly="readonly" :disabled="disabled" :cols="cols" @focus="focus" @blur="blur" class="textarea border border-stroke focus:border-grayscale-600 focus:outline-none w-full text-text bg-primary px-5 py-3 focus:bg-grayscale-400 rounded-xl" />
 </template>
 
 <script>
@@ -11,7 +11,9 @@ export default {
       default: 4
     },
     id: String,
-    readonly: Boolean
+    readonly: Boolean,
+    disabled: Boolean,
+    focusOnMount: Boolean
   },
   data() {
     return {}
@@ -26,8 +28,23 @@ export default {
       }
     }
   },
-  methods: {},
-  mounted() {}
+  methods: {
+    focus() {
+      this.$emit('focus')
+    },
+    blur() {
+      this.$emit('blur')
+    }
+  },
+  mounted() {
+    if (this.focusOnMount) {
+      this.$nextTick(() => {
+        if (this.$refs.textarea) {
+          this.$refs.textarea.focus()
+        }
+      })
+    }
+  }
 }
 </script>
 

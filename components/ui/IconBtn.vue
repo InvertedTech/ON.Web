@@ -1,5 +1,5 @@
 <template>
-  <button v-if="!to" class="flex items-center justify-center rounded-full hover:bg-white hover:bg-opacity-10 focus:outline-none" :style="{ width: size, minWidth: size, height: size }" @click="$emit('click', $event)">
+  <button v-if="!to" class="flex items-center justify-center rounded-full hover:bg-white hover:bg-opacity-10 focus:outline-none" :type="type" :style="{ width: size, minWidth: size, height: size }" @click="$emit('click', $event)">
     <span class="material-icons" :style="{ fontSize: iconSize }">
       {{ icon }}
     </span>
@@ -23,6 +23,10 @@ export default {
     iconSize: {
       type: String,
       default: '30px'
+    },
+    type: {
+      type: String,
+      default: 'button'
     }
   },
   data() {

@@ -1,41 +1,60 @@
 <template>
   <div class="w-full">
-    <div class="flex flex-wrap mb-4">
-      <div class="w-full md:w-1/2 pr-4 border-r border-r-white/10">
-        <h2 class="text-xl font-bold text-text mb-4">Channels</h2>
-
-        <p v-if="!NewChannels.length" class="text-lg font-medium text-grayscale-900 text-center py-4">No Channels</p>
-
-        <template v-for="channel in NewChannels">
-          <div :key="channel.ChannelId" class="flex items-center p-4 border border-white/10">
-            <p class="text-white/80 text-base font-medium">{{ channel.DisplayName }}</p>
-            <div class="flex-grow" />
-            <ui-icon-btn icon="delete" icon-size="22px" class="text-grayscale-800 hover:text-red-400" @click="removeChannel(channel.ChannelId)" />
-          </div>
-        </template>
-
-        <form @submit.prevent="submitNewChannel" class="flex items-center py-4">
-          <ui-text-input v-model="NewChannelName" placeholder="New Channel Name" class="mr-2" />
-          <!-- <ui-btn :disabled="!NewChannelName" type="submit">Add</ui-btn> -->
-        </form>
+    <div class="w-full rounded-md bg-white/5 mb-6">
+      <div class="w-full rounded-md p-4 text-center bg-white/5">
+        <h1 class="text-lg font-medium">Channels</h1>
       </div>
-      <div class="w-full md:w-1/2 pl-4">
-        <h2 class="text-xl font-bold text-text mb-4">Categories</h2>
-
-        <p v-if="!NewCategories.length" class="text-lg font-medium text-grayscale-900 text-center py-4">No Categories</p>
-
-        <template v-for="category in NewCategories">
-          <div :key="category.CategoryId" class="flex items-center p-4 border border-white/10">
-            <p class="text-white/80 text-base font-medium">{{ category.DisplayName }}</p>
-            <div class="flex-grow" />
-            <ui-icon-btn icon="delete" icon-size="22px" class="text-grayscale-800 hover:text-red-400" @click="removeCategory(category.CategoryId)" />
+      <div class="p-4">
+        <div class="flex flex-wrap">
+          <template v-for="channel in NewChannels">
+            <div :key="channel.ChannelId" class="w-full md:max-w-[50%] h-20 p-1">
+              <div class="h-full flex items-center p-4 bg-bg border border-white/10 rounded-md">
+                <p class="text-white/80 text-base font-medium">{{ channel.DisplayName }}</p>
+                <div class="flex-grow" />
+                <ui-icon-btn icon="delete" icon-size="22px" class="text-grayscale-800 hover:text-red-400" @click.stop="clickRemoveChannel(channel)" />
+              </div>
+            </div>
+          </template>
+          <div class="w-full md:max-w-[50%] h-20 p-1">
+            <form @submit.prevent="submitNewChannel" class="h-full flex items-center px-2 bg-bg border border-white/10 rounded-md">
+              <div class="relative w-full">
+                <input v-model="NewChannelName" type="text" placeholder="Add New Channel.." class="text-input focus:outline-none w-full h-full text-text bg-transparent p-2 rounded-md placeholder:italic" />
+                <div class="absolute right-0 top-0 flex items-center h-full px-2">
+                  <ui-icon-btn icon="add_circle_outline" type="submit" icon-size="22px" :class="NewChannelName ? 'text-text' : 'text-grayscale-800'" />
+                </div>
+              </div>
+            </form>
           </div>
-        </template>
+        </div>
+      </div>
+    </div>
 
-        <form @submit.prevent="submitNewCategory" class="flex items-center py-4">
-          <ui-text-input v-model="NewCategoryName" placeholder="New Category Name" class="mr-2" />
-          <!-- <ui-btn :disabled="!NewCategoryName" type="submit">Add</ui-btn> -->
-        </form>
+    <div class="w-full rounded-md bg-white/5 mb-6">
+      <div class="w-full rounded-md p-4 text-center bg-white/5">
+        <h1 class="text-lg font-medium">Categories</h1>
+      </div>
+      <div class="p-4">
+        <div class="flex flex-wrap">
+          <template v-for="category in NewCategories">
+            <div :key="category.CategoryId" class="w-full md:max-w-[50%] h-20 p-1">
+              <div class="h-full flex items-center p-4 bg-bg border border-white/10 rounded-md">
+                <p class="text-white/80 text-base font-medium">{{ category.DisplayName }}</p>
+                <div class="flex-grow" />
+                <ui-icon-btn icon="delete" icon-size="22px" class="text-grayscale-800 hover:text-red-400" @click.stop="clickRemoveCategory(category)" />
+              </div>
+            </div>
+          </template>
+          <div class="w-full md:max-w-[50%] h-20 p-1">
+            <form @submit.prevent="submitNewCategory" class="h-full flex items-center px-2 bg-bg border border-white/10 rounded-md">
+              <div class="relative w-full">
+                <input v-model="NewCategoryName" type="text" placeholder="Add New Category.." class="text-input focus:outline-none w-full h-full text-text bg-transparent p-2 rounded-md placeholder:italic" />
+                <div class="absolute right-0 top-0 flex items-center h-full px-2">
+                  <ui-icon-btn icon="add_circle_outline" type="submit" icon-size="22px" :class="NewCategoryName ? 'text-text' : 'text-grayscale-800'" />
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -75,6 +94,20 @@ export default {
     }
   },
   methods: {
+    clickRemoveCategory(category) {
+      const payload = {
+        message: `Delete category ${category.DisplayName}?`,
+        yesButtonText: 'Delete',
+        yesButtonColor: 'error',
+        callback: (confirmed) => {
+          if (confirmed) {
+            this.removeCategory(category.CategoryId)
+          }
+        },
+        type: 'yesNo'
+      }
+      this.$store.commit('globals/setConfirmPrompt', payload)
+    },
     removeCategory(categoryId) {
       this.processing = true
       this.$axios
@@ -115,6 +148,20 @@ export default {
         .finally(() => {
           this.processing = false
         })
+    },
+    clickRemoveChannel(channel) {
+      const payload = {
+        message: `Delete channel ${channel.DisplayName}?`,
+        yesButtonText: 'Delete',
+        yesButtonColor: 'error',
+        callback: (confirmed) => {
+          if (confirmed) {
+            this.removeChannel(channel.ChannelId)
+          }
+        },
+        type: 'yesNo'
+      }
+      this.$store.commit('globals/setConfirmPrompt', payload)
     },
     removeChannel(channelId) {
       this.processing = true

@@ -3,7 +3,7 @@
     <div class="absolute top-0 left-0 right-0 w-full h-36 bg-gradient-to-t from-transparent via-black-500 to-black-700 opacity-90 pointer-events-none" />
     <div ref="content" class="relative text-white" :style="{ height: modalHeight, width: modalWidth }" v-click-outside="clickedOutside">
       <div class="px-4 w-full text-sm py-6 rounded-lg bg-bg shadow-lg">
-        <p class="text-lg mb-6 mt-2 px-1" v-html="message" />
+        <p class="text-base mb-6 mt-2 px-1" v-html="message" />
 
         <ui-text-input v-if="confirmDeleteText" v-model="confirmDeleteInput" :placeholder="confirmDeletePlaceholder" small class="mb-6" />
 
