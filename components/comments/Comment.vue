@@ -11,7 +11,8 @@
           <p class="text-xs text-grayscale-800 px-2">{{ $dateDistanceFromNow(new Date(comment.CreatedOnUTC).valueOf()) }}</p>
         </div>
         <template v-if="!isEditing">
-          <p class="mb-2 text-sm whitespace-pre-line">{{ commentText || '' }}</p>
+          <p ref="commentp" class="mb-2 text-sm whitespace-pre-line" :class="{ 'line-clamp-4': !showFullComment }">{{ commentText || '' }}</p>
+          <button v-if="commentClamped" type="button" class="text-sm font-semibold block -mt-1 mb-2 text-white/60 hover:underline" @click="showFullComment = !showFullComment">{{ showFullComment ? 'Show less' : 'Read more' }}</button>
           <div class="flex items-center">
             <div class="w-12">
               <button class="flex items-center rounded-full -ml-2 py-1 px-2 hover:bg-white/10" :class="LikedByUser ? 'text-accent-darker hover:text-accent' : 'text-white/80 hover:text-white'" :disabled="submittingLike || deletingComment" @click="likeClick">
@@ -83,6 +84,8 @@ export default {
   data() {
     return {
       commentText: '',
+      showFullComment: false,
+      commentClamped: false,
       isEditing: false,
       editCommentText: '',
       hovering: false,
@@ -300,6 +303,14 @@ export default {
     },
     commentTextareaFocused(isFocused) {
       this.commentFocused = isFocused
+    },
+    checkCommentClamped() {
+      if (this.showFullComment) return
+      if (!this.$refs.commentp) {
+        this.commentClamped = false
+      } else {
+        this.commentClamped = this.$refs.commentp.scrollHeight > this.$refs.commentp.clientHeight
+      }
     }
   },
   mounted() {
@@ -307,6 +318,7 @@ export default {
     if (this.isReply) {
       this.newComment = `@${this.comment.UserDisplayName} `
     }
+    this.$nextTick(() => this.checkCommentClamped())
   }
 }
 </script>

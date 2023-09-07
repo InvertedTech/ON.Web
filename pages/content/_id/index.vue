@@ -41,7 +41,7 @@ export default {
       console.error('Failed to get content', error)
       return null
     })
-    if (!response || !response.Record) {
+    if (!response?.Record) {
       return redirect('/')
     }
     const related = await app.$axios.$get(`/api/cms/content/${params.id}/related`).catch((error) => {

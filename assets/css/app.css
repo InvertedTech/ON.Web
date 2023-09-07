@@ -23,3 +23,10 @@
 .rich-text p {
   min-height: 24px;
 }
+
+.line-clamp-4 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+}
