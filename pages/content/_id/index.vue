@@ -52,10 +52,14 @@ export default {
       console.error('Failed to get stats', error)
       return null
     })
-    const comments = await app.$axios.$get(`/api/comment/content/${params.id}?PageSize=50`).catch((error) => {
-      console.error('Failed to get comments', error)
-      return null
-    })
+
+    let comments = null
+    if (store.state.auth.user) {
+      comments = await app.$axios.$get(`/api/comment/content/${params.id}?PageSize=50`).catch((error) => {
+        console.error('Failed to get comments', error)
+        return null
+      })
+    }
     return {
       contentId: params.id,
       content: response.Record,

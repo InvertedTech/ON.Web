@@ -56,9 +56,9 @@ export default {
         })
     },
     init() {
-      this.NewPersonalization.Title = this.Personalization.Title || ''
-      this.NewPersonalization.MetaDescription = this.Personalization.MetaDescription || ''
-      this.NewPersonalization.ProfileImageAssetId = this.Personalization.ProfileImageAssetId || null
+      this.NewPersonalization.Title = this.Personalization?.Title || ''
+      this.NewPersonalization.MetaDescription = this.Personalization?.MetaDescription || ''
+      this.NewPersonalization.ProfileImageAssetId = this.Personalization?.ProfileImageAssetId || null
     }
   },
   mounted() {

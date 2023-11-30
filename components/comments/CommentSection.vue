@@ -12,7 +12,7 @@
       </div>
     </div>
     <div v-else>
-      <p>Log in to post a comment</p>
+      <p><nuxt-link to="/login" class="text-accent hover:underline">Log in</nuxt-link> to post a comment</p>
     </div>
 
     <template v-for="comment in commentsLoaded">
@@ -48,7 +48,14 @@ export default {
   },
   methods: {
     commentDeleted(comment) {
-      this.commentsLoaded = this.commentsLoaded.filter((c) => c.CommentID !== comment.CommentID)
+      console.log('CommentSection commentDeleted=', comment)
+      this.commentsLoaded = this.commentsLoaded.map((c) => {
+        if (c.CommentID === comment.CommentID) {
+          c.DeletedOnUTC = new Date().toISOString()
+          c.CommentText = 'Removed by user'
+        }
+        return c
+      })
     },
     commentTextareaFocused(isFocused) {
       this.commentFocused = isFocused

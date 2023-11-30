@@ -12,29 +12,33 @@ export const getters = {
     return !!state.user
   },
   PublicData: state => {
-    return state.user ? state.user.Public : null
+    return state.user?.Public || null
   },
   PrivateData: state => {
-    return state.user ? state.user.Private : null
+    return state.user?.Private || null
   },
   UserId: (state, getters) => {
-    return getters.PublicData ? getters.PublicData.UserID : null
+    return getters.PublicData?.UserID || null
   },
   UserData: (state, getters) => {
-    return getters.PublicData ? getters.PublicData.Data : null
+    return getters.PublicData?.Data || null
   },
   DisplayName: (state, getters) => {
-    return getters.UserData ? getters.UserData.DisplayName : null
+    return getters.UserData?.DisplayName || null
   },
   UserName: (state, getters) => {
-    return getters.UserData ? getters.UserData.UserName : null
+    return getters.UserData?.UserName || null
   },
   Roles: (state, getters) => {
-    return getters.PrivateData ? getters.PrivateData.Roles : null
+    return getters.PrivateData?.Roles || null
   },
   isOwner: (state, getters) => {
-    if (!getters.Roles) return false
-    return getters.Roles.some(r => r === 'owner')
+    if (!getters.Roles?.length) return false
+    return getters.Roles.includes('owner')
+  },
+  isAdminOrUp: (state, getters) => {
+    if (!getters.Roles?.length) return false
+    return getters.isOwner || getters.Roles.includes('admin')
   },
   SubscriptionLevel: (state) => {
     if (!state.jwtData || !state.jwtData.SubscriptionLevel || isNaN(state.jwtData.SubscriptionLevel)) return 0
@@ -99,6 +103,7 @@ export const mutations = {
   },
   setUser(state, user) {
     state.user = user
+    console.log('Set user', state.user)
   },
   setToken(state, token) {
     state.token = token

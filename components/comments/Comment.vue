@@ -8,7 +8,8 @@
       <div class="w-full" @mouseover="mouseoverComment" @mouseleave="mouseoutComment">
         <div class="flex items-center mb-1">
           <p class="text-sm font-semibold">{{ comment.UserDisplayName || comment.UserID }}</p>
-          <p class="text-xs text-grayscale-800 px-2">{{ $dateDistanceFromNow(new Date(comment.CreatedOnUTC).valueOf()) }}</p>
+          <p class="text-[13px] text-grayscale-950 px-2">@{{ comment.UserName }}</p>
+          <p class="text-xs text-grayscale-800">{{ $dateDistanceFromNow(new Date(timestamp).valueOf()) }} <span v-if="comment.DeletedOnUTC">(removed)</span><span v-else-if="comment.ModifiedOnUTC">(edited)</span></p>
         </div>
         <template v-if="!isEditing">
           <p ref="commentp" class="mb-2 text-sm whitespace-pre-line" :class="{ 'line-clamp-4': !showFullComment }">{{ commentText || '' }}</p>
@@ -22,10 +23,10 @@
             </div>
             <button class="font-bold text-xs mx-4 rounded-full py-1 px-3 text-white/80 hover:text-white hover:bg-white/10" @click.stop="replyClick">Reply</button>
             <div class="flex-grow" />
-            <button v-if="UserID === comment.UserID && hovering" :disabled="deletingComment" class="flex items-center rounded-full mx-1 py-1 px-1 text-white/80 hover:text-white hover:bg-white/10" @click="editClick">
+            <button v-if="!isDeleted && UserID === comment.UserID && hovering" :disabled="deletingComment" class="flex items-center rounded-full mx-1 py-1 px-1 text-white/80 hover:text-white hover:bg-white/10" @click="editClick">
               <span class="material-icons-outlined text-lg">edit</span>
             </button>
-            <button v-if="UserID === comment.UserID && hovering" :disabled="deletingComment" class="flex items-center rounded-full mx-1 py-1 px-1 text-white/80 hover:text-white hover:bg-white/10" @click.stop.prevent="deleteClick">
+            <button v-if="!isDeleted && (UserID === comment.UserID || isAdminOrUp) && hovering" :disabled="deletingComment" class="flex items-center rounded-full mx-1 py-1 px-1 text-white/80 hover:text-white hover:bg-white/10" @click.stop.prevent="deleteClick">
               <span class="material-icons-outlined text-lg">delete</span>
             </button>
           </div>
@@ -101,12 +102,24 @@ export default {
       replies: []
     }
   },
+  watch: {
+    comment(newVal) {
+      console.log('Comment updated', newVal)
+      this.init()
+    }
+  },
   computed: {
     UserID() {
       return this.$store.getters['auth/UserId']
     },
     UserDisplayName() {
       return this.$store.getters['auth/DisplayName']
+    },
+    isAdminOrUp() {
+      return this.$store.getters['auth/isAdminOrUp']
+    },
+    isDeleted() {
+      return this.comment.DeletedOnUTC
     },
     numReplies() {
       return this.comment.NumReplies || 0
@@ -125,12 +138,15 @@ export default {
     LikesByOtherUsers() {
       if (this.comment.LikedByUser) return Number(this.comment.Likes || 0) - 1
       return Number(this.comment.Likes || 0)
+    },
+    timestamp() {
+      return this.comment.DeletedOnUTC || this.comment.ModifiedOnUTC || this.comment.CreatedOnUTC
     }
   },
   methods: {
     deleteReply(comment) {
+      console.log('Comment deleteReply comment=', comment)
       this.replies = this.replies.filter((r) => r.CommentID !== comment.CommentID)
-      this.comment.NumReplies = this.replies.length
     },
     addReply(comment) {
       this.replies.push(comment)
@@ -170,15 +186,21 @@ export default {
      * Delete comment
      */
     async deleteClick() {
+      let message = 'Delete your comment permanently?'
+      let endpoint = `/api/comment/${this.comment.CommentID}/delete`
+      if (this.UserID !== this.comment.UserID) {
+        message = `Are you sure you want to delete this comment by @${this.comment.UserName}?`
+        endpoint = `/api/comment/admin/${this.comment.CommentID}/delete`
+      }
       const payload = {
-        message: `Delete your comment permanently?`,
+        message,
         yesButtonText: 'Delete',
         yesButtonColor: 'error',
         callback: (confirmed) => {
           if (confirmed) {
             this.deletingComment = true
             this.$axios
-              .$post(`/api/comment/${this.comment.CommentID}/delete`)
+              .$post(endpoint)
               .then((response) => {
                 console.log('Comment deleted', response)
 
@@ -311,14 +333,18 @@ export default {
       } else {
         this.commentClamped = this.$refs.commentp.scrollHeight > this.$refs.commentp.clientHeight
       }
+    },
+    init() {
+      this.commentText = this.comment.CommentText
+
+      this.$nextTick(() => this.checkCommentClamped())
     }
   },
   mounted() {
-    this.commentText = this.comment.CommentText
+    this.init()
     if (this.isReply) {
       this.newComment = `@${this.comment.UserDisplayName} `
     }
-    this.$nextTick(() => this.checkCommentClamped())
   }
 }
 </script>
