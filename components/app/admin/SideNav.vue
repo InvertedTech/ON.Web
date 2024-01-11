@@ -37,11 +37,6 @@ export default {
           to: '/admin/members'
         },
         {
-          icon: 'show_chart',
-          name: 'Analytics',
-          to: '/admin/analytics'
-        },
-        {
           icon: 'refresh',
           name: 'Subscriptions',
           to: '/admin/subscriptions'

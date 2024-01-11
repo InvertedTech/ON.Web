@@ -8,9 +8,11 @@
 
     <div class="w-full">
       <template v-for="post in posts">
-        <cards-admin-post-card :key="post.ContentID" :post="post" @reload="reloadPosts" class="mb-5" />
+        <cards-admin-post-card :key="post.ContentID" :post="post" class="mb-5" @reload="reloadPosts" @publish="publishPostClick(post)" />
       </template>
     </div>
+
+    <modals-publish-post-modal v-model="showPublishModal" :post="selectedPost" />
   </div>
 </template>
 
@@ -19,11 +21,17 @@ export default {
   layout: 'blank',
   data() {
     return {
-      posts: []
+      posts: [],
+      selectedPost: null,
+      showPublishModal: false
     }
   },
   computed: {},
   methods: {
+    publishPostClick(post) {
+      this.selectedPost = post
+      this.showPublishModal = true
+    },
     reloadPosts() {
       this.load()
     },

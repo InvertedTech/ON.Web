@@ -1,6 +1,6 @@
 <template>
   <div class="w-full max-w-3xl mx-auto h-full py-4">
-    <div class="w-full aspect-[2] rounded-3xl overflow-hidden">
+    <div v-if="featuredImageSrc" class="w-full aspect-[2] rounded-3xl overflow-hidden">
       <img :src="featuredImageSrc" class="w-full object-cover" />
     </div>
     <div class="py-4 w-full">
@@ -78,7 +78,7 @@ export default {
       return this.ContentData.FeaturedImageAssetID
     },
     featuredImageSrc() {
-      if (!this.FeaturedImageAssetID) return 'https://picsum.photos/1200/800'
+      if (!this.FeaturedImageAssetID) return null
       return `${this.$config.baseURL}/api/cms/asset/${this.FeaturedImageAssetID}/data`
     },
     statsData() {

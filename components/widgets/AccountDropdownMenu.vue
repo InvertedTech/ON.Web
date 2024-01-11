@@ -89,11 +89,6 @@ export default {
           to: '/admin/members'
         },
         {
-          text: 'Analytics',
-          value: 'analytics',
-          to: '/admin/analytics'
-        },
-        {
           text: 'Subscriptions',
           value: 'subscriptions',
           to: '/admin/subscriptions'

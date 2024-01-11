@@ -72,6 +72,9 @@ export default {
 </script>
 
 <style scoped>
+.text-input {
+  color-scheme: dark;
+}
 .text-input:read-only {
   color: #aaa;
   background-color: #2d2d2d;

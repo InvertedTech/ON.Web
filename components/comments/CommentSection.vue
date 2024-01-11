@@ -44,6 +44,9 @@ export default {
     },
     UserDisplayName() {
       return this.$store.getters['auth/DisplayName']
+    },
+    UserName() {
+      return this.$store.getters['auth/UserName']
     }
   },
   methods: {
@@ -88,6 +91,7 @@ export default {
         LikedByUser: false,
         Likes: 0,
         NumReplies: 0,
+        UserName: this.UserName,
         UserDisplayName: this.UserDisplayName,
         UserID: this.UserID
       }
