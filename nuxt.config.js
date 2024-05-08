@@ -23,6 +23,7 @@ export default {
     ]
   },
   css: [
+    '@/assets/css/fonts.css',
     '@/assets/css/app.css'
   ],
   plugins: [
@@ -31,9 +32,7 @@ export default {
     '@/plugins/axios.js',
   ],
   components: true,
-  buildModules: [
-    '@nuxtjs/tailwindcss',
-  ],
+  buildModules: [],
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/proxy'
@@ -45,6 +44,15 @@ export default {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     baseURL: '/'
   },
-  build: {
-  }
+  /*
+   ** Build configuration
+   */
+   build: {
+    postcss: {
+      plugins: {
+        tailwindcss: {},
+        autoprefixer: {},
+      },
+    }
+  },
 }
